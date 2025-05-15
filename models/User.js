@@ -49,12 +49,12 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    User.hasOne(models.Booking, {
+    User.hasOne(models.Consultation, {
       foreignKey: 'user_id',
       onDelete: 'SET NULL',
     });
 
-    User.hasMany(models.Time_Frame, {
+    User.hasMany(models.Job_Booking, {
       foreignKey: 'user_id',
       onDelete: 'CASCADE',
     });
