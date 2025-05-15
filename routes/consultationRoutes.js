@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const consultationController = require('../controllers/consultationController');
-const { requireAuth } = require('../middlewares/auth');
+const { requireAuth } = require('../middleware/auth');
 
 // Booking Routes
 
