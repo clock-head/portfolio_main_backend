@@ -36,10 +36,10 @@ app.use(
 
 // Routes
 const authRoutes = require('./routes/authRoutes');
-const bookingRoutes = require('./routes/bookingRoutes');
+const consultationRoutes = require('./routes/consultationRoutes');
 
-app.use('/auth', authRoutes);
-app.use('/booking', bookingRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/consultation', consultationRoutes);
 
 db.sequelize.sync().then(() => {
   app.listen(process.env.PORT || 4000, () => {

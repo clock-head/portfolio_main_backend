@@ -6,42 +6,31 @@ const { requireAuth } = require('../middlewares/auth');
 // Booking Routes
 
 // Get available dates for booking (public)
-router.get(
-  '/api/consultation/available-dates',
-  consultationController.getAvailableDates
-);
+router.get('/available-dates', consultationController.getAvailableDates);
 
 // Get available time slots for a specific date (public)
 router.get(
-  '/api/consultation/available-timeslots',
+  '/available-timeslots',
   requireAuth,
   consultationController.getAvailableTimeSlots
 );
 
 // Submit a new booking (guarded by auth middleware)
-router.post(
-  '/api/consultation/create',
-  requireAuth,
-  consultationController.createConsultation
-);
+router.post('/create', requireAuth, consultationController.createConsultation);
 
 // (Optional) Get current user's booking
 router.get(
-  '/api/consultation/my-consultation',
+  '/my-consultation',
   requireAuth,
   consultationController.getUserConsultation
 );
 
 // (Optional) Cancel a booking
-router.post(
-  '/api/consultation/cancel',
-  requireAuth,
-  consultationController.cancelConsultation
-);
+router.post('/cancel', requireAuth, consultationController.cancelConsultation);
 
 // (Optional) Reschedule a booking
 router.post(
-  '/api/consultation/reschedule',
+  '/reschedule',
   requireAuth,
   consultationController.rescheduleConsultation
 );
