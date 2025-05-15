@@ -23,7 +23,7 @@ const {
   verifyFourCancelled,
   cancelActiveConsultation,
   lockUserOut,
-} = require('./services/consultationService');
+} = require('../services/consultationService');
 
 const { Op } = require('sequelize');
 
