@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      tokenHash: {
+      token_hash: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      expiresAt: {
+      expires_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },

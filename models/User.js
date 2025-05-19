@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      firstName: {
+      first_name: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      lastName: {
+      last_name: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -23,15 +23,15 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
-      passwordHash: {
+      password_hash: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      isAdmin: {
+      is_admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      lockedUntil: {
+      locked_until: {
         type: DataTypes.DATE,
         allowNull: true,
       },

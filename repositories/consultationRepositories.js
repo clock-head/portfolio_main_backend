@@ -24,7 +24,7 @@ async function getRecentAttendedConsultations(userId, limit = 2) {
 async function getConfirmedConsultationsForDate(date) {
   return Consultation.findAll({
     where: {
-      selectedDate: date,
+      selected_date: date,
       status: 'confirmed',
     },
   });
@@ -73,9 +73,9 @@ async function createNewConsultation(consultationData) {
 }
 
 async function rescheduleConsultation(consultation, newDate, newTime) {
-  consultation.selectedDate = newDate;
-  consultation.selectedTime = newTime;
-  consultation.hasRescheduled = true;
+  consultation.selected_date = newDate;
+  consultation.selected_time = newTime;
+  consultation.has_rescheduled = true;
   return consultation.save();
 }
 

@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
-      selectedDate: {
+      selected_date: {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      selectedTime: {
+      selected_time: {
         type: DataTypes.TIME,
         allowNull: false,
       },
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('resolved', 'open'),
         defaultValue: 'open',
       },
-      hasRescheduled: {
+      has_rescheduled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },

@@ -41,7 +41,7 @@ const consultationRoutes = require('./routes/consultationRoutes');
 app.use('/api/auth', authRoutes);
 app.use('/api/consultation', consultationRoutes);
 
-db.sequelize.sync().then(() => {
+db.sequelize.authenticate().then(() => {
   app.listen(process.env.PORT || 4000, () => {
     console.log('Server running on port 4000');
   });
