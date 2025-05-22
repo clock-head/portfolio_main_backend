@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       token_hash: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -135,9 +135,12 @@ module.exports = {
         user_id: user.user_id,
         name,
         email,
-        selectedDate,
-        selectedTime,
+        selected_date: selectedDate,
+        selected_time: selectedTime,
         status: 'pending',
+        resolution_status: 'open',
+        has_rescheduled: false,
+        notes: null,
       });
 
       return res

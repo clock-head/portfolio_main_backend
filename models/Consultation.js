@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      selected_time: {
+      start_time: {
+        type: DataTypes.TIME,
+        allowNull: false,
+      },
+      end_time: {
         type: DataTypes.TIME,
         allowNull: false,
       },

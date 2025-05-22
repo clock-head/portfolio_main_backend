@@ -19,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      status: {
+        type: DataTypes.ENUM('booked', 'in_progress', 'revision', 'completed'),
+        defaultValue: 'booked',
+      },
+      revised: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       notes: {
         type: DataTypes.TEXT,
         allowNull: true,

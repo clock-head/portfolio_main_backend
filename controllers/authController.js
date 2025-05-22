@@ -6,7 +6,11 @@ const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 
 module.exports = {
   signup: async (req, res) => {
-    const { email, password, fullName } = req.body;
+    const { email, password, firstName, lastName } = req.body;
+
+    if (!email || !password || !firstName || !lastName) {
+      return res.status(400).json({ message: 'All fields are required.' });
+    }
 
     try {
       const existing = await User.findOne({ where: { email } });
@@ -14,7 +18,13 @@ module.exports = {
         return res.status(409).json({ message: 'Email already in use.' });
 
       const passwordHash = await bcrypt.hash(password, 12);
-      const newUser = await User.create({ email, passwordHash, fullName });
+      const newUser = await User.create({
+        email: email.toLowerCase(),
+        password_hash: passwordHash,
+        first_name: firstName,
+        last_name: lastName,
+        is_admin: false,
+      });
 
       return res.status(201).json({ message: 'User created successfully.' });
     } catch (err) {
@@ -66,5 +76,35 @@ module.exports = {
 
     res.clearCookie('session_token');
     return res.status(200).json({ message: 'Logged out successfully.' });
+  },
+
+  getCurrentUser: async (req, res) => {
+    try {
+      const rawToken = req.cookies?.session_token;
+      if (!rawToken)
+        return res.status(401).json({ message: 'No session token found.' });
+
+      const tokenHash = crypto
+        .createHash('sha256')
+        .update(rawToken)
+        .digest('hex');
+
+      const session = await Session.findOne({ where: { tokenHash } });
+      if (!session || new Date() > session.expiresAt) {
+        return res.status(401).json({ message: 'Session expired or invalid.' });
+      }
+
+      const user = await User.findByPk(session.user_id, {
+        attributes: ['user_id', 'email', 'username', 'createdAt'],
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+
+      return res.status(200).json({ user });
+    } catch (err) {
+      return res.status(500).json({ error: 'Internal server error.' });
+    }
   },
 };
