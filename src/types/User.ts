@@ -20,6 +20,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   isAdmin: boolean;
+  lockedUntil: Date;
   createdAt: Date;
   updatedAt: Date;
 }

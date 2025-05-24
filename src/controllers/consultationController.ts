@@ -35,12 +35,13 @@ import { Request, Response } from 'express';
 
 module.exports = {
   createConsultation: async (req: Request, res: Response) => {
+    // typescript compiler is looking for a user object here
     try {
       const { selectedDate, selectedTime, name, email } = req.body;
       const user = req.user;
 
       // 1. Guard: Lockout Check
-      if (user.lockedUntil && new Date(user.lockedUntil) > new Date()) {
+      if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
         return res.status(403).json({
           message:
             'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
@@ -49,7 +50,7 @@ module.exports = {
 
       // 2. Guard: Active Booking Check
 
-      const activeConsultation = await getActiveConsultation(user.user_id);
+      const activeConsultation = await getActiveConsultation(user?.user_id);
 
       if (activeConsultation) {
         return res.status(409).json({
@@ -67,7 +68,10 @@ module.exports = {
       }
 
       // 3. Guard: Consecutive Cancellation Lockout
-      const recentConsultations = await getRecentConsultations(user.user_id, 4);
+      const recentConsultations = await getRecentConsultations(
+        user?.user_id,
+        4
+      );
       const [first, second, third, fourth] = recentConsultations;
       const twoCancelled = await verifyTwoCancelled([first, second]);
       const today = new Date();
@@ -142,7 +146,7 @@ module.exports = {
       }
 
       const newConsultation = await createNewConsultation({
-        userId: user.user_id,
+        userId: user?.user_id,
         name,
         email,
         selectedDate: selectedDate,
@@ -164,7 +168,7 @@ module.exports = {
 
   getUserConsultation: async (req: Request, res: Response) => {
     try {
-      const consultation = await getUserConsultation(req.user.user_id);
+      const consultation = await getUserConsultation(req.user?.user_id);
 
       if (!consultation) {
         return res.status(404).json({ message: 'No active booking found.' });
@@ -179,7 +183,7 @@ module.exports = {
 
   cancelConsultation: async (req: Request, res: Response) => {
     try {
-      const consultation = await getActiveConsultation(req.user.user_id);
+      const consultation = await getActiveConsultation(req.user?.user_id);
 
       if (!consultation) {
         return res.status(404).json({ message: 'No booking to cancel.' });
@@ -203,7 +207,7 @@ module.exports = {
       const user = req.user;
       const { newDate, newStartTime, newEndTime } = req.body;
 
-      const consultation = await getActiveConsultation(user.user_id);
+      const consultation = await getActiveConsultation(user?.user_id);
 
       // 1. Guard: check if the user has an active booking
 
@@ -279,7 +283,7 @@ module.exports = {
       }
 
       //Looped indecision check
-      const attended = await getAttendedConsultations(user.user_id, 2);
+      const attended = await getAttendedConsultations(user?.user_id, 2);
       const bothUnresolved = await verifyTwoUnresolved(attended);
 
       if (bothUnresolved) {

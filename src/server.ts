@@ -17,8 +17,8 @@ const sessionStore = new SequelizeStore({
 });
 
 // Routes
-const authRoutes = require('../routes/authRoutes');
-const consultationRoutes = require('../routes/consultationRoutes');
+const authRoutes = require('./routes/authRoutes');
+const consultationRoutes = require('./routes/consultationRoutes');
 
 (async () => {
   try {
