@@ -1,5 +1,8 @@
+import { Consultation } from '../models/consultation.model';
+import { WorkSprint } from '../models/worksprint.model';
+
 // Generates a list of time slots for consultations
-generateHourlySlots = () => {
+const generateHourlySlots = () => {
   const slots = [];
   for (let h = 10; h < 18; h++) {
     slots.push(`${h.toString().padStart(2, '0')}:00`);
@@ -8,9 +11,9 @@ generateHourlySlots = () => {
 };
 
 // ✅ Returns [count] working days starting from [startDate]
-function generateWorkingDays(startDate, count) {
+function generateWorkingDays(startDate: Date, count: number) {
   const dates = [];
-  const cursor = new Date(startDate);
+  const cursor = new Date(startDate); // Date is mutable, and cloning it like this protects the original from being mutated during iteration.
 
   while (dates.length < count) {
     const day = cursor.getDay(); // 0 = Sunday, 6 = Saturday
@@ -25,7 +28,7 @@ function generateWorkingDays(startDate, count) {
 }
 
 // ✅ Checks if the old consultation date is at least 1 working day ahead of now
-function isWorkingDayNotice(oldDate, now = new Date()) {
+function isWorkingDayNotice(oldDate: string, now = new Date()) {
   const oneDayLater = new Date(now);
   oneDayLater.setDate(now.getDate() + 1);
 
@@ -33,12 +36,16 @@ function isWorkingDayNotice(oldDate, now = new Date()) {
 }
 
 // generates available time slots for a given date
-function generateAvailableTimeSlots(consults, sprints) {
+function generateAvailableTimeSlots(
+  consults: Array<Consultation>,
+  sprints: Array<WorkSprint>
+) {
   const blockedTimes = new Set();
   // base slots
   const allSlots = generateHourlySlots();
+  let availableTimeSlots = [];
 
-  consults.forEach((c) => blockedTimes.add(c.selectedTime));
+  consults.forEach((c) => blockedTimes.add(c.startTime));
 
   sprints.forEach((sprint) => {
     const startHour = parseInt(sprint.sprint_start_time.split(':')[0]);
@@ -55,8 +62,4 @@ function generateAvailableTimeSlots(consults, sprints) {
   ));
 }
 
-module.exports = {
-  generateWorkingDays,
-  generateAvailableTimeSlots,
-  isWorkingDayNotice,
-};
+export { generateWorkingDays, generateAvailableTimeSlots, isWorkingDayNotice };

@@ -1,8 +1,8 @@
-const {
+import {
   generateWorkingDays,
   isWorkingDayNotice,
   generateAvailableTimeSlots,
-} = require('../utils/consultationUtils');
+} from '../utils/consultation.utils';
 
 const {
   getConfirmedConsultationsForDate,
@@ -13,7 +13,7 @@ const {
   getUserConsultation,
   rescheduleConsultation,
   createNewConsultation,
-} = require('../repositories/consultationRepositories');
+} = require('../../repositories/consultation.repositories');
 
 const {
   verifyTwoCancelled,
@@ -25,10 +25,16 @@ const {
   lockUserOut,
 } = require('../services/consultationService');
 
+const { Consultation } = require('../models/consultation.model');
+
+import { IUser } from '../types/User';
+
 const { Op } = require('sequelize');
 
+import { Request, Response } from 'express';
+
 module.exports = {
-  createConsultation: async (req, res) => {
+  createConsultation: async (req: Request, res: Response) => {
     try {
       const { selectedDate, selectedTime, name, email } = req.body;
       const user = req.user;
@@ -67,7 +73,8 @@ module.exports = {
       const today = new Date();
 
       if (twoCancelled) {
-        const oneWeekAgo = today.setDate(oneWeekAgo.getDate() - 7);
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
         if (first.createdAt > oneWeekAgo) {
           // Set lock
@@ -87,7 +94,8 @@ module.exports = {
         third,
       ]);
       if (threeUnresolved) {
-        const oneWeekAgo = today.setDate(oneWeekAgo.getDate() - 7);
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
         if (first.createdAt > oneWeekAgo) {
           // Set lock
           const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -103,7 +111,8 @@ module.exports = {
 
       const fourCancelled = await verifyFourCancelled(recentConsultations);
       if (fourCancelled) {
-        const oneMonthAgo = today.setDate(today.getDate() - 30);
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setDate(today.getDate() - 30);
         if (first.createdAt > oneMonthAgo) {
           // Set lock
           const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -119,7 +128,8 @@ module.exports = {
 
       const fourUnresolved = await verifyFourUnresolved(recentConsultations);
       if (fourUnresolved) {
-        const oneMonthAgo = today.setDate(today.getDate() - 30);
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setDate(today.getDate() - 30);
         if (first.createdAt > oneMonthAgo) {
           // Set lock
           const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -132,14 +142,14 @@ module.exports = {
       }
 
       const newConsultation = await createNewConsultation({
-        user_id: user.user_id,
+        userId: user.user_id,
         name,
         email,
-        selected_date: selectedDate,
-        selected_time: selectedTime,
+        selectedDate: selectedDate,
+        selectedTime: selectedTime,
         status: 'pending',
-        resolution_status: 'open',
-        has_rescheduled: false,
+        resolutionStatus: 'open',
+        hasRescheduled: false,
         notes: null,
       });
 
@@ -152,7 +162,7 @@ module.exports = {
     }
   },
 
-  getUserConsultation: async (req, res) => {
+  getUserConsultation: async (req: Request, res: Response) => {
     try {
       const consultation = await getUserConsultation(req.user.user_id);
 
@@ -167,7 +177,7 @@ module.exports = {
     }
   },
 
-  cancelConsultation: async (req, res) => {
+  cancelConsultation: async (req: Request, res: Response) => {
     try {
       const consultation = await getActiveConsultation(req.user.user_id);
 
@@ -188,10 +198,10 @@ module.exports = {
     }
   },
 
-  rescheduleConsultation: async (req, res) => {
+  rescheduleConsultation: async (req: Request, res: Response) => {
     try {
       const user = req.user;
-      const { newDate, newTime } = req.body;
+      const { newDate, newStartTime, newEndTime } = req.body;
 
       const consultation = await getActiveConsultation(user.user_id);
 
@@ -232,7 +242,7 @@ module.exports = {
       // Block reschedule with same date/time
       if (
         consultation.selectedDate === newDate &&
-        consultation.selectedTime === newTime
+        consultation.startTime === newStartTime
       ) {
         return res
           .status(400)
@@ -240,11 +250,16 @@ module.exports = {
       }
 
       // Update with new time and flag reschedule
-      await rescheduleConsultation(consultation, newDate, newTime);
+      const newConsultation = await rescheduleConsultation(
+        consultation,
+        newDate,
+        newStartTime,
+        newEndTime
+      );
 
       return res.status(200).json({
         message: 'Your consultation booking has been rescheduled.',
-        booking,
+        newConsultation,
       });
     } catch (err) {
       console.error('[Reschedule Consultation Booking Error]', err);
@@ -252,11 +267,16 @@ module.exports = {
     }
   },
 
-  getAvailableDates: async (req, res) => {
+  getAvailableDates: async (req: Request, res: Response) => {
     try {
       const user = req.user;
-      const { month, year } = req.query;
+      const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
+      const year = parseInt(req.query.year as string, 10); // current year passed in through frontend query params.
       let offsetDays = 0;
+
+      if (isNaN(month) || isNaN(year)) {
+        return res.status(400).json({ message: 'Invalid query parameters.' });
+      }
 
       //Looped indecision check
       const attended = await getAttendedConsultations(user.user_id, 2);
@@ -266,7 +286,7 @@ module.exports = {
         offsetDays = 3; // Skip 3 calendar days
       }
 
-      const startDate = new Date(year, month - 1, 1);
+      const startDate = new Date(year, month - 1, 1); // returns a Date object
       startDate.setDate(startDate.getDate() + offsetDays);
 
       //Dynamically determine how many days in the selected month
@@ -282,7 +302,7 @@ module.exports = {
     }
   },
 
-  getAvailableTimeSlots: async (req, res) => {
+  getAvailableTimeSlots: async (req: Request, res: Response) => {
     try {
       const { date } = req.query;
       const user = req.user;

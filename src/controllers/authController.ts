@@ -1,16 +1,28 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { User, Session } = require('../models');
+import { UserPayload, SignupBody } from '../types/User';
+import { Request, Response } from 'express';
+import { z } from 'zod';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 
-module.exports = {
-  signup: async (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
+const signupSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(12),
+  firstName: z.string(),
+  lastName: z.string(),
+});
 
-    if (!email || !password || !firstName || !lastName) {
-      return res.status(400).json({ message: 'All fields are required.' });
+module.exports = {
+  signup: async (req: Request<{}, {}, SignupBody>, res: Response) => {
+    const validation = signupSchema.safeParse(req.body);
+
+    if (!validation.success) {
+      return res.status(400).json({ errors: validation.error.format() });
     }
+
+    const { email, password, firstName, lastName } = validation.data;
 
     try {
       const existing = await User.findOne({ where: { email } });
@@ -18,13 +30,16 @@ module.exports = {
         return res.status(409).json({ message: 'Email already in use.' });
 
       const passwordHash = await bcrypt.hash(password, 12);
-      const newUser = await User.create({
+
+      const payload: UserPayload = {
         email: email.toLowerCase(),
-        password_hash: passwordHash,
-        first_name: firstName,
-        last_name: lastName,
-        is_admin: false,
-      });
+        passwordHash: passwordHash,
+        firstName: firstName,
+        lastName: lastName,
+        isAdmin: false,
+      };
+
+      const newUser = await User.create(payload);
 
       return res.status(201).json({ message: 'User created successfully.' });
     } catch (err) {
@@ -32,14 +47,14 @@ module.exports = {
     }
   },
 
-  login: async (req, res) => {
+  login: async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ message: 'User not found.' });
 
-      const match = await bcrypt.compare(password, user.passwordHash);
+      const match = await bcrypt.compare(password, user.password_hash);
       if (!match)
         return res.status(401).json({ message: 'Incorrect password.' });
 
@@ -63,7 +78,7 @@ module.exports = {
     }
   },
 
-  logout: async (req, res) => {
+  logout: async (req: Request, res: Response) => {
     const rawToken = req.cookies?.session_token;
     if (!rawToken)
       return res.status(200).json({ message: 'Already logged out.' });
@@ -78,7 +93,7 @@ module.exports = {
     return res.status(200).json({ message: 'Logged out successfully.' });
   },
 
-  getCurrentUser: async (req, res) => {
+  getCurrentUser: async (req: Request, res: Response) => {
     try {
       const rawToken = req.cookies?.session_token;
       if (!rawToken)
