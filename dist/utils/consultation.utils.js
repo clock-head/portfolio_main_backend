@@ -12,16 +12,18 @@ const generateHourlySlots = () => {
     return slots;
 };
 // ✅ Returns [count] working days starting from [startDate]
-function generateWorkingDays(startDate, count) {
+function generateWorkingDays(startDate, daysInMonth) {
     const dates = [];
     const cursor = new Date(startDate); // Date is mutable, and cloning it like this protects the original from being mutated during iteration.
-    while (dates.length < count) {
+    let count = 0;
+    while (count < daysInMonth) {
         const day = cursor.getDay(); // 0 = Sunday, 6 = Saturday
         if (day >= 1 && day <= 5) {
             // Monday to Friday only
             dates.push(new Date(cursor));
         }
         cursor.setDate(cursor.getDate() + 1);
+        count++;
     }
     return dates;
 }
