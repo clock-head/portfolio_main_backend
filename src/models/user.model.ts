@@ -62,7 +62,7 @@ export class User extends Model<User, UserCreationAttributes> {
     foreignKey: 'user_id',
     onDelete: 'SET NULL',
   })
-  consultation!: Consultation;
+  consultation!: import('./consultation.model').Consultation;
 
   @HasMany(() => JobBooking, {
     foreignKey: 'user_id',

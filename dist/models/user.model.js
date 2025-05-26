@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const session_model_1 = require("./session.model");
-const consultation_model_1 = require("./consultation.model");
 const job_booking_model_1 = require("./job_booking.model");
 let User = class User extends sequelize_typescript_1.Model {
 };
@@ -70,7 +69,7 @@ __decorate([
         foreignKey: 'user_id',
         onDelete: 'SET NULL',
     }),
-    __metadata("design:type", consultation_model_1.Consultation)
+    __metadata("design:type", Object)
 ], User.prototype, "consultation", void 0);
 __decorate([
     (0, sequelize_typescript_1.HasMany)(() => job_booking_model_1.JobBooking, {
