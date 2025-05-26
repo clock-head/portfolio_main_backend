@@ -14,9 +14,10 @@ import {
 import { Session } from './session.model';
 import { Consultation } from './consultation.model';
 import { JobBooking } from './job_booking.model';
+import { UserCreationAttributes } from '../types/User';
 
 @Table({ tableName: 'users' })
-export class User extends Model<User> {
+export class User extends Model<User, UserCreationAttributes> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)

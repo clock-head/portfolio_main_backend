@@ -13,6 +13,14 @@ export interface UserPayload {
   isAdmin: boolean;
 }
 
+export interface UserCreationAttributes {
+  email: string;
+  passwordHash: string;
+  firstName: string;
+  lastName: string;
+  isAdmin: boolean;
+}
+
 export interface IUser {
   user_id: number;
   email: string;

@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const { User, Session } = require('../models');
+// const { User, Session } = require('../models');
+import { User } from '../models/user.model';
+import { Session } from '../models/session.model';
 import { UserPayload, SignupBody } from '../types/User';
+import { CreationAttributes } from 'sequelize';
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
@@ -31,7 +34,7 @@ module.exports = {
 
       const passwordHash = await bcrypt.hash(password, 12);
 
-      const payload: UserPayload = {
+      const payload: CreationAttributes<User> = {
         email: email.toLowerCase(),
         passwordHash: passwordHash,
         firstName: firstName,
@@ -43,6 +46,7 @@ module.exports = {
 
       return res.status(201).json({ message: 'User created successfully.' });
     } catch (err) {
+      console.log(User);
       return res.status(500).json({ error: `Internal server error: ${err}` });
     }
   },
@@ -54,7 +58,7 @@ module.exports = {
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ message: 'User not found.' });
 
-      const match = await bcrypt.compare(password, user.password_hash);
+      const match = await bcrypt.compare(password, user.passwordHash);
       if (!match)
         return res.status(401).json({ message: 'Incorrect password.' });
 

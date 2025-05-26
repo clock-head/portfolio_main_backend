@@ -3,3 +3,9 @@ export interface ISession {
   userId: number;
   expiresAt: Date;
 }
+
+export interface SessionCreationAttributes {
+  user_id: number;
+  tokenHash: string;
+  expiresAt: Date;
+}

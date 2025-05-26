@@ -12,13 +12,14 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { User } from './user.model';
+import { SessionCreationAttributes } from '../types/Session';
 
 @Table({
   tableName: 'sessions',
   timestamps: true,
   underscored: true,
 })
-export class Session extends Model<Session> {
+export class Session extends Model<Session, SessionCreationAttributes> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
