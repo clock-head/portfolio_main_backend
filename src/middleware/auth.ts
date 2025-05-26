@@ -1,8 +1,9 @@
 const crypto = require('crypto');
 const { Session, User } = require('../models');
+import { Request, Response, NextFunction } from 'express';
 
 // Middleware to protect routes
-const requireAuth = async (req, res, next) => {
+const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const rawToken = req.cookies?.session_token;
 
   if (!rawToken) {

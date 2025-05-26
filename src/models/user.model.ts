@@ -38,7 +38,7 @@ export class User extends Model<User> {
   @Column({ type: DataType.BOOLEAN, field: 'is_admin' })
   isAdmin!: boolean;
 
-  @Column({ type: DataType.DATE, field: 'is_admin' })
+  @Column({ type: DataType.DATE, field: 'locked_until' })
   lockedUntil!: Date;
 
   @CreatedAt

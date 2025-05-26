@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, field: 'is_admin' }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, field: 'locked_until' }),
     __metadata("design:type", Date)
 ], User.prototype, "lockedUntil", void 0);
 __decorate([
