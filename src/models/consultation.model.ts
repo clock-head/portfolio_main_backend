@@ -30,7 +30,7 @@ export class Consultation extends Model<
   @Column(DataType.INTEGER)
   consultation_id!: number;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => require('./user.model').User)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   user_id!: number;
@@ -72,6 +72,6 @@ export class Consultation extends Model<
   @Column({ field: 'updated_at' })
   updatedAt!: Date;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => require('./user.model').User)
   user!: User;
 }

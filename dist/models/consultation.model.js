@@ -22,7 +22,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Consultation.prototype, "consultation_id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
+    (0, sequelize_typescript_1.ForeignKey)(() => require('./user.model').User),
     (0, sequelize_typescript_1.AllowNull)(false),
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
@@ -74,7 +74,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Consultation.prototype, "updatedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
+    (0, sequelize_typescript_1.BelongsTo)(() => require('./user.model').User),
     __metadata("design:type", user_model_1.User)
 ], Consultation.prototype, "user", void 0);
 exports.Consultation = Consultation = __decorate([

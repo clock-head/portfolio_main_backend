@@ -1,9 +1,3 @@
-const fs = require('fs');
-// const path = require('path');
-// const Sequelize = require('sequelize');
-// const basename = path.basename(__filename);
-// const env = process.env.NODE_ENV || 'development';
-
 import { Sequelize } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Session } from './session.model';
@@ -12,20 +6,6 @@ import { JobBooking } from './job_booking.model';
 import { WorkSprint } from './worksprint.model';
 
 require('dotenv').config();
-
-// const sequelize = new Sequelize(process.env.DB_URL_INTERNAL, {
-//   dialect: 'postgres',
-//   logging: false,
-//   dialectOptions: {
-//     ssl:
-//       process.env.DB_SSL === 'true'
-//         ? {
-//             require: true,
-//             rejectUnauthorized: false,
-//           }
-//         : false,
-//   },
-// });
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',

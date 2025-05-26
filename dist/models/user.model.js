@@ -66,7 +66,7 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "sessions", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasOne)(() => consultation_model_1.Consultation, {
+    (0, sequelize_typescript_1.HasOne)(() => require('./consultaion.model').Consultation, {
         foreignKey: 'user_id',
         onDelete: 'SET NULL',
     }),

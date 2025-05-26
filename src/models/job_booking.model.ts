@@ -49,7 +49,7 @@ export class JobBooking extends Model<JobBooking> {
   @Column(DataType.TEXT)
   notes!: string | null;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => require('./user.model').User)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   user_id!: number;

@@ -58,7 +58,7 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   sessions!: Session[];
 
-  @HasOne(() => Consultation, {
+  @HasOne(() => require('./consultaion.model').Consultation, {
     foreignKey: 'user_id',
     onDelete: 'SET NULL',
   })
