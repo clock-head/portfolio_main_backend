@@ -30,7 +30,7 @@ async function getConfirmedConsultationsForDate(date) {
 }
 // ⏱ Get work sprints for a given date
 async function getWorkSprintsForDate(date) {
-    return require('../models/worksprint.model').Work_Sprint.findAll({
+    return require('../models/worksprint.model').WorkSprint.findAll({
         where: { sprint_date: date },
     });
 }
