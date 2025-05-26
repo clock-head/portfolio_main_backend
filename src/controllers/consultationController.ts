@@ -13,7 +13,7 @@ const {
   getUserConsultation,
   rescheduleConsultation,
   createNewConsultation,
-} = require('../../repositories/consultation.repositories');
+} = require('../repositories/consultation.repositories');
 
 const {
   verifyTwoCancelled,

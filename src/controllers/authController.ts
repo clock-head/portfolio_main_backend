@@ -43,7 +43,7 @@ module.exports = {
 
       return res.status(201).json({ message: 'User created successfully.' });
     } catch (err) {
-      return res.status(500).json({ error: 'Internal server error.' });
+      return res.status(500).json({ error: `Internal server error: ${err}` });
     }
   },
 
