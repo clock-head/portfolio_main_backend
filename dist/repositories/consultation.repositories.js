@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_model_1 = require("../models/consultation.model");
 const { Work_Sprint } = require('../models');
-const { Op } = require('sequelize');
+const { Op, CreationAttributes } = require('sequelize');
 // Get recent consultations for a user
 async function getRecentConsultations(userId, limit = 2) {
     return consultation_model_1.Consultation.findAll({

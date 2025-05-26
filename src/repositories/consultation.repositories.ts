@@ -1,7 +1,8 @@
+import { CreationAttributes } from 'sequelize';
 import { Consultation } from '../models/consultation.model';
 
 const { Work_Sprint } = require('../models');
-const { Op } = require('sequelize');
+const { Op, CreationAttributes } = require('sequelize');
 import { ConsultationPayload } from '../types/Consultation';
 
 // Get recent consultations for a user
@@ -71,7 +72,9 @@ async function getUserConsultation(userId: number) {
 }
 
 //  Create a new consultation
-async function createNewConsultation(consultationData: Consultation) {
+async function createNewConsultation(
+  consultationData: CreationAttributes<Consultation>
+) {
   return Consultation.create(consultationData);
 }
 

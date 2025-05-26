@@ -14,13 +14,17 @@ import {
 } from 'sequelize-typescript';
 
 import { User } from './user.model';
+import { ConsultationCreationAttributes } from '../types/Consultation';
 
 @Table({
   tableName: 'consultations',
   underscored: true,
   timestamps: true,
 })
-export class Consultation extends Model<Consultation> {
+export class Consultation extends Model<
+  Consultation,
+  ConsultationCreationAttributes
+> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
