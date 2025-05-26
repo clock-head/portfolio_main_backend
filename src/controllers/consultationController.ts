@@ -332,7 +332,7 @@ module.exports = {
       return res.status(200).json({ date, availableTimeSlots });
     } catch (err) {
       console.error('[getAvailableTimeSlots Error]', err);
-      return res.status(500).json({ message: 'Internal server error.' });
+      return res.status(500).json({ message: `Internal server error ${err}.` });
     }
   },
 };
