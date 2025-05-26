@@ -9,7 +9,7 @@ module.exports = {
     createConsultation: async (req, res) => {
         // typescript compiler is looking for a user object here
         try {
-            const { selectedDate, selectedTime, name, email } = req.body;
+            const { selectedDate, startTime, endTime, name, email } = req.body;
             const user = req.user;
             // 1. Guard: Lockout Check
             if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
@@ -100,7 +100,8 @@ module.exports = {
                 name,
                 email,
                 selectedDate: selectedDate,
-                selectedTime: selectedTime,
+                startTime: startTime,
+                endTime: endTime,
                 status: 'pending',
                 resolutionStatus: 'open',
                 hasRescheduled: false,
@@ -199,6 +200,7 @@ module.exports = {
     getAvailableDates: async (req, res) => {
         try {
             const user = req.user;
+            let isLoggedIn = user;
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
             const year = parseInt(req.query.year, 10); // current year passed in through frontend query params.
             let offsetDays = 0;
@@ -206,10 +208,12 @@ module.exports = {
                 return res.status(400).json({ message: 'Invalid query parameters.' });
             }
             //Looped indecision check
-            const attended = await getAttendedConsultations(user?.user_id, 2);
-            const bothUnresolved = await verifyTwoUnresolved(attended);
-            if (bothUnresolved) {
-                offsetDays = 3; // Skip 3 calendar days
+            if (isLoggedIn) {
+                const attended = await getAttendedConsultations(user?.user_id, 2);
+                const bothUnresolved = await verifyTwoUnresolved(attended);
+                if (bothUnresolved) {
+                    offsetDays = 3; // Skip 3 calendar days
+                }
             }
             const startDate = new Date(year, month - 1, 1); // returns a Date object
             startDate.setDate(startDate.getDate() + offsetDays);
@@ -220,7 +224,7 @@ module.exports = {
         }
         catch (err) {
             console.error('[getAvailableDates Error]', err);
-            return res.status(500).json({ message: 'Internal server error.' });
+            return res.status(500).json({ message: `Internal server error ${err}.` });
         }
     },
     getAvailableTimeSlots: async (req, res) => {

@@ -11,7 +11,6 @@ router.get('/available-dates', consultationController.getAvailableDates);
 // Get available time slots for a specific date (public)
 router.get(
   '/available-timeslots',
-  requireAuth,
   consultationController.getAvailableTimeSlots
 );
 

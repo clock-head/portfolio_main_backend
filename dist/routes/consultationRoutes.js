@@ -11,7 +11,7 @@ const { requireAuth } = require('../middleware/auth');
 // Get available dates for booking (public)
 router.get('/available-dates', consultationController.getAvailableDates);
 // Get available time slots for a specific date (public)
-router.get('/available-timeslots', requireAuth, consultationController.getAvailableTimeSlots);
+router.get('/available-timeslots', consultationController.getAvailableTimeSlots);
 // Submit a new booking (guarded by auth middleware)
 router.post('/create', requireAuth, consultationController.createConsultation);
 // (Optional) Get current user's booking
