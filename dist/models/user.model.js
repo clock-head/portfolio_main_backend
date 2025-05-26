@@ -11,8 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const session_model_1 = require("./session.model");
-const job_booking_model_1 = require("./job_booking.model");
 let User = class User extends sequelize_typescript_1.Model {
 };
 exports.User = User;
@@ -58,7 +56,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => session_model_1.Session, {
+    (0, sequelize_typescript_1.HasMany)(() => require('./session.model').Session, {
         foreignKey: 'user_id',
         onDelete: 'CASCADE',
     }),
@@ -72,7 +70,7 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "consultation", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => job_booking_model_1.JobBooking, {
+    (0, sequelize_typescript_1.HasMany)(() => require('./job_booking.model').JobBooking, {
         foreignKey: 'user_id',
         onDelete: 'CASCADE',
     }),
@@ -81,63 +79,3 @@ __decorate([
 exports.User = User = __decorate([
     (0, sequelize_typescript_1.Table)({ tableName: 'users' })
 ], User);
-// module.exports = (sequelize, DataTypes) => {
-//   const User = sequelize.define(
-//     'User',
-//     {
-//       user_id: {
-//         type: DataTypes.INTEGER,
-//         primaryKey: true,
-//         autoIncrement: true,
-//       },
-//       first_name: {
-//         type: DataTypes.STRING,
-//         allowNull: true,
-//       },
-//       last_name: {
-//         type: DataTypes.STRING,
-//         allowNull: true,
-//       },
-//       email: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//         unique: true,
-//         validate: {
-//           isEmail: true,
-//         },
-//       },
-//       password_hash: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//       },
-//       is_admin: {
-//         type: DataTypes.BOOLEAN,
-//         defaultValue: false,
-//       },
-//       locked_until: {
-//         type: DataTypes.DATE,
-//         allowNull: true,
-//       },
-//     },
-//     {
-//       tableName: 'users',
-//       underscored: true,
-//       timestamps: true,
-//     }
-//   );
-//   User.associate = (models) => {
-//     User.hasMany(models.Session, {
-//       foreignKey: 'user_id',
-//       onDelete: 'CASCADE',
-//     });
-//     User.hasOne(models.Consultation, {
-//       foreignKey: 'user_id',
-//       onDelete: 'SET NULL',
-//     });
-//     User.hasMany(models.Job_Booking, {
-//       foreignKey: 'user_id',
-//       onDelete: 'CASCADE',
-//     });
-//   };
-//   return User;
-// };

@@ -11,7 +11,6 @@ import {
   CreatedAt,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { User } from './user.model';
 import { SessionCreationAttributes } from '../types/Session';
 
 @Table({
@@ -25,7 +24,7 @@ export class Session extends Model<Session, SessionCreationAttributes> {
   @Column(DataType.INTEGER)
   session_id!: number;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => require('./user.model').User)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   user_id!: number;
@@ -46,6 +45,6 @@ export class Session extends Model<Session, SessionCreationAttributes> {
   @Column({ field: 'updated_at' })
   updatedAt!: Date;
 
-  @BelongsTo(() => User)
-  user!: User;
+  @BelongsTo(() => require('./user.model').User)
+  user!: import('./user.model').User;
 }

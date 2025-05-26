@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", Number)
 ], JobBooking.prototype, "user_id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
+    (0, sequelize_typescript_1.BelongsTo)(() => require('./user.model').User),
     __metadata("design:type", user_model_1.User)
 ], JobBooking.prototype, "user", void 0);
 __decorate([

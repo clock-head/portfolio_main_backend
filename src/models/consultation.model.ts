@@ -13,7 +13,6 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { User } from './user.model';
 import { ConsultationCreationAttributes } from '../types/Consultation';
 
 @Table({
@@ -73,5 +72,5 @@ export class Consultation extends Model<
   updatedAt!: Date;
 
   @BelongsTo(() => require('./user.model').User)
-  user!: User;
+  user!: import('./user.model').User;
 }

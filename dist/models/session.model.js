@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Session = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const user_model_1 = require("./user.model");
 let Session = class Session extends sequelize_typescript_1.Model {
 };
 exports.Session = Session;
@@ -22,7 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Session.prototype, "session_id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => user_model_1.User),
+    (0, sequelize_typescript_1.ForeignKey)(() => require('./user.model').User),
     (0, sequelize_typescript_1.AllowNull)(false),
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
     __metadata("design:type", Number)
@@ -48,8 +47,8 @@ __decorate([
     __metadata("design:type", Date)
 ], Session.prototype, "updatedAt", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => user_model_1.User),
-    __metadata("design:type", user_model_1.User)
+    (0, sequelize_typescript_1.BelongsTo)(() => require('./user.model').User),
+    __metadata("design:type", Object)
 ], Session.prototype, "user", void 0);
 exports.Session = Session = __decorate([
     (0, sequelize_typescript_1.Table)({

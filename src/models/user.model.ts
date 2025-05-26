@@ -11,9 +11,6 @@ import {
   HasMany,
   HasOne,
 } from 'sequelize-typescript';
-import { Session } from './session.model';
-import { Consultation } from './consultation.model';
-import { JobBooking } from './job_booking.model';
 import { UserCreationAttributes } from '../types/User';
 
 @Table({ tableName: 'users' })
@@ -52,11 +49,11 @@ export class User extends Model<User, UserCreationAttributes> {
 
   // Associations
 
-  @HasMany(() => Session, {
+  @HasMany(() => require('./session.model').Session, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
   })
-  sessions!: Session[];
+  sessions!: import('./session.model').Session[];
 
   @HasOne(() => require('./consultaion.model').Consultation, {
     foreignKey: 'user_id',
@@ -64,74 +61,9 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   consultation!: import('./consultation.model').Consultation;
 
-  @HasMany(() => JobBooking, {
+  @HasMany(() => require('./job_booking.model').JobBooking, {
     foreignKey: 'user_id',
     onDelete: 'CASCADE',
   })
-  jobBookings!: JobBooking[];
+  jobBookings!: import('./job_booking.model').JobBooking[];
 }
-
-// module.exports = (sequelize, DataTypes) => {
-//   const User = sequelize.define(
-//     'User',
-//     {
-//       user_id: {
-//         type: DataTypes.INTEGER,
-//         primaryKey: true,
-//         autoIncrement: true,
-//       },
-//       first_name: {
-//         type: DataTypes.STRING,
-//         allowNull: true,
-//       },
-//       last_name: {
-//         type: DataTypes.STRING,
-//         allowNull: true,
-//       },
-//       email: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//         unique: true,
-//         validate: {
-//           isEmail: true,
-//         },
-//       },
-//       password_hash: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//       },
-//       is_admin: {
-//         type: DataTypes.BOOLEAN,
-//         defaultValue: false,
-//       },
-//       locked_until: {
-//         type: DataTypes.DATE,
-//         allowNull: true,
-//       },
-//     },
-//     {
-//       tableName: 'users',
-//       underscored: true,
-//       timestamps: true,
-//     }
-//   );
-
-//   User.associate = (models) => {
-//     User.hasMany(models.Session, {
-//       foreignKey: 'user_id',
-//       onDelete: 'CASCADE',
-//     });
-
-//     User.hasOne(models.Consultation, {
-//       foreignKey: 'user_id',
-//       onDelete: 'SET NULL',
-//     });
-
-//     User.hasMany(models.Job_Booking, {
-//       foreignKey: 'user_id',
-//       onDelete: 'CASCADE',
-//     });
-//   };
-
-//   return User;
-// };

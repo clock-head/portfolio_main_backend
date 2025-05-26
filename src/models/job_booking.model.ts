@@ -54,7 +54,7 @@ export class JobBooking extends Model<JobBooking> {
   @Column(DataType.INTEGER)
   user_id!: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => require('./user.model').User)
   user!: User;
 
   @CreatedAt
