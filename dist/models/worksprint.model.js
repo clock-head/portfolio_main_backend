@@ -22,19 +22,19 @@ __decorate([
 ], WorkSprint.prototype, "work_sprint_id", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.DATEONLY),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATEONLY, field: 'sprint_date' }),
     __metadata("design:type", String)
-], WorkSprint.prototype, "sprint_date", void 0);
+], WorkSprint.prototype, "sprintDate", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.TIME),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.TIME, field: 'sprint_start_time' }),
     __metadata("design:type", String)
-], WorkSprint.prototype, "sprint_start_time", void 0);
+], WorkSprint.prototype, "sprintStartTime", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.TIME),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.TIME, field: 'sprint_end_time' }),
     __metadata("design:type", String)
-], WorkSprint.prototype, "sprint_end_time", void 0);
+], WorkSprint.prototype, "sprintEndTime", void 0);
 __decorate([
     sequelize_typescript_1.CreatedAt,
     (0, sequelize_typescript_1.Column)({ field: 'created_at' }),

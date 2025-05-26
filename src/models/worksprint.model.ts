@@ -1,3 +1,5 @@
+import { WorkSprintCreationAttributes } from '../types/WorkSprint';
+
 import {
   Table,
   Column,
@@ -15,23 +17,26 @@ import {
   timestamps: true,
   underscored: true,
 })
-export class WorkSprint extends Model<WorkSprint> {
+export class WorkSprint extends Model<
+  WorkSprint,
+  WorkSprintCreationAttributes
+> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
   work_sprint_id!: number;
 
   @AllowNull(false)
-  @Column(DataType.DATEONLY)
-  sprint_date!: string;
+  @Column({ type: DataType.DATEONLY, field: 'sprint_date' })
+  sprintDate!: string;
 
   @AllowNull(false)
-  @Column(DataType.TIME)
-  sprint_start_time!: string;
+  @Column({ type: DataType.TIME, field: 'sprint_start_time' })
+  sprintStartTime!: string;
 
   @AllowNull(false)
-  @Column(DataType.TIME)
-  sprint_end_time!: string;
+  @Column({ type: DataType.TIME, field: 'sprint_end_time' })
+  sprintEndTime!: string;
 
   @CreatedAt
   @Column({ field: 'created_at' })

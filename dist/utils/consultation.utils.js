@@ -41,8 +41,8 @@ function generateAvailableTimeSlots(consults, sprints) {
     let availableTimeSlots = [];
     consults.forEach((c) => blockedTimes.add(c.startTime));
     sprints.forEach((sprint) => {
-        const startHour = parseInt(sprint.sprint_start_time.split(':')[0]);
-        const endHour = parseInt(sprint.sprint_end_time.split(':')[0]);
+        const startHour = parseInt(sprint.sprintStartTime.split(':')[0]);
+        const endHour = parseInt(sprint.sprintEndTime.split(':')[0]);
         for (let h = startHour; h < endHour; h++) {
             blockedTimes.add(`${h.toString().padStart(2, '0')}:00`);
         }
