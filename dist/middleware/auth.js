@@ -24,7 +24,7 @@ const requireAuth = async (req, res, next) => {
         }
         // Attach user object to request
         req.user = session.user;
-        req.session = session;
+        req.dbSession = session;
         next();
     }
     catch (err) {
