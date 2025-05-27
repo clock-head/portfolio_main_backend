@@ -33,6 +33,7 @@ module.exports = {
             }
             // 3. Guard: Consecutive Cancellation Lockout
             const recentConsultations = await getRecentConsultations(user?.user_id, 4);
+            console.log(recentConsultations);
             const [first, second, third, fourth] = recentConsultations;
             const twoCancelled = await verifyTwoCancelled([first, second]);
             const today = new Date();

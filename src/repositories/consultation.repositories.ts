@@ -3,12 +3,13 @@ import { CreationAttributes } from 'sequelize';
 
 const { Work_Sprint } = require('../models');
 const { Op, CreationAttributes } = require('sequelize');
+import { Consultation } from '../models';
 import { ConsultationPayload } from '../types/Consultation';
 
 // Get recent consultations for a user
 
 async function getRecentConsultations(userId: number, limit = 2) {
-  return require('../models/consultation.model').Consultation.findAll({
+  return Consultation.findAll({
     where: { user_id: userId },
     order: [['created_at', 'DESC']],
     limit,

@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // import { Consultation } from '../models/consultation.model';
 const { Work_Sprint } = require('../models');
 const { Op, CreationAttributes } = require('sequelize');
+const models_1 = require("../models");
 // Get recent consultations for a user
 async function getRecentConsultations(userId, limit = 2) {
-    return require('../models/consultation.model').Consultation.findAll({
+    return models_1.Consultation.findAll({
         where: { user_id: userId },
         order: [['created_at', 'DESC']],
         limit,
