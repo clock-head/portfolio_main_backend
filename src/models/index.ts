@@ -23,6 +23,13 @@ const sequelize = new Sequelize({
             rejectUnauthorized: false,
           }
         : false,
+    keepAlive: true,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   },
   models: [User, Session, Consultation, JobBooking, WorkSprint], // Add all models here
 });
