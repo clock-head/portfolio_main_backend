@@ -16,6 +16,7 @@ async function lockUserOut(user: User, duration: Date) {
 async function verifyTwoCancelled(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 2) return false;
   const [first, second] = recentConsultations;
+  console.log(recentConsultations);
   return first.status === 'cancelled' && second.status === 'cancelled';
 }
 

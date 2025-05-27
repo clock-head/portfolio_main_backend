@@ -25,7 +25,6 @@ const requireAuth = async (req, res, next) => {
         // Attach user object to request
         req.user = session.user;
         req.session = session;
-        console.log('auth middle level user', req.user);
         next();
     }
     catch (err) {
