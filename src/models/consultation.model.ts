@@ -31,8 +31,8 @@ export class Consultation extends Model<
 
   @ForeignKey(() => require('./user.model').User)
   @AllowNull(false)
-  @Column(DataType.INTEGER)
-  user_id!: number;
+  @Column({ type: DataType.INTEGER, field: 'user_id' })
+  userId!: number;
 
   @AllowNull(false)
   @Column({ type: DataType.DATEONLY, field: 'selected_date' })

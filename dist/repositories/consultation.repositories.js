@@ -7,7 +7,7 @@ const models_1 = require("../models");
 // Get recent consultations for a user
 async function getRecentConsultations(userId, limit = 2) {
     return models_1.Consultation.findAll({
-        where: { user_id: userId },
+        where: { userId: userId },
         order: [['created_at', 'DESC']],
         limit,
     });

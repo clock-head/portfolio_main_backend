@@ -23,9 +23,9 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => require('./user.model').User),
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, field: 'user_id' }),
     __metadata("design:type", Number)
-], Consultation.prototype, "user_id", void 0);
+], Consultation.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATEONLY, field: 'selected_date' }),

@@ -10,7 +10,7 @@ import { ConsultationPayload } from '../types/Consultation';
 
 async function getRecentConsultations(userId: number, limit = 2) {
   return Consultation.findAll({
-    where: { user_id: userId },
+    where: { userId: userId },
     order: [['created_at', 'DESC']],
     limit,
   });
