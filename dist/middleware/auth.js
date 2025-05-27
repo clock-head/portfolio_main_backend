@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = require('crypto');
-const { Session, User } = require('../models');
+const models_1 = require("../models");
 // Middleware to protect routes
 const requireAuth = async (req, res, next) => {
     const rawToken = req.cookies?.session_token;
@@ -13,9 +13,9 @@ const requireAuth = async (req, res, next) => {
             .createHash('sha256')
             .update(rawToken)
             .digest('hex');
-        const session = await Session.findOne({
+        const session = await models_1.Session.findOne({
             where: { tokenHash },
-            include: [{ model: User }],
+            include: [{ model: models_1.User }],
         });
         if (!session || new Date() > session.expiresAt) {
             if (session)
@@ -23,7 +23,7 @@ const requireAuth = async (req, res, next) => {
             return res.status(401).json({ message: 'Session expired or invalid.' });
         }
         // Attach user object to request
-        req.user = session.User;
+        req.user = session.user;
         req.session = session;
         console.log('auth middle level user', req.user);
         next();

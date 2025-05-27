@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { Session, User } = require('../models');
+import { Session, User } from '../models';
 import { Request, Response, NextFunction } from 'express';
 
 // Middleware to protect routes
@@ -27,7 +27,7 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // Attach user object to request
-    req.user = session.User;
+    req.user = session.user;
     req.session = session;
     console.log('auth middle level user', req.user);
     next();

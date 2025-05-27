@@ -1,11 +1,11 @@
-import { IUser } from '../User';
-import { ISession } from '../Session';
+import { Session } from '../models/session.model';
+import { User } from '../models/user.model';
 
 declare global {
   namespace Express {
     interface Request {
-      user?: IUser;
-      session?: ISession;
+      user?: User;
+      session?: Session;
     }
   }
 }
