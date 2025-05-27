@@ -33,66 +33,71 @@ module.exports = {
             }
             // 3. Guard: Consecutive Cancellation Lockout
             const recentConsultations = await getRecentConsultations(user?.user_id, 4);
-            console.log(recentConsultations);
-            const [first, second, third, fourth] = recentConsultations;
-            const twoCancelled = await verifyTwoCancelled([first, second]);
-            const today = new Date();
-            if (twoCancelled) {
-                const oneWeekAgo = new Date();
-                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                if (first.createdAt > oneWeekAgo) {
-                    // Set lock
-                    const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-                    await lockUserOut(user, oneWeek);
-                    return res.status(403).json({
-                        message: 'You are locked out for 1 week due to having cancelled twice in a row.',
-                    });
-                }
-            }
-            // 4. Guard: Consecutive Unresolved Consultations Lockout
-            const threeUnresolved = await verifyThreeUnresolved([
-                first,
-                second,
-                third,
-            ]);
-            if (threeUnresolved) {
-                const oneWeekAgo = new Date();
-                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                if (first.createdAt > oneWeekAgo) {
-                    // Set lock
-                    const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-                    await lockUserOut(user, oneWeek);
-                    return res.status(403).json({
-                        message: 'You are temporarily locked out due to three unresolved consultations.',
-                    });
-                }
-            }
-            // 5. Guard: 4 Consecutive Cancellation Lockout (one month)
-            const fourCancelled = await verifyFourCancelled(recentConsultations);
-            if (fourCancelled) {
-                const oneMonthAgo = new Date();
-                oneMonthAgo.setDate(today.getDate() - 30);
-                if (first.createdAt > oneMonthAgo) {
-                    // Set lock
-                    const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-                    await lockUserOut(user, oneMonth);
-                    return res.status(403).json({
-                        message: 'You have been locked out for a month due to four cancelled consultations.',
-                    });
-                }
-            }
-            // 6. Guard: 4 consecutive Cancellation Lockout (one month)
-            const fourUnresolved = await verifyFourUnresolved(recentConsultations);
-            if (fourUnresolved) {
-                const oneMonthAgo = new Date();
-                oneMonthAgo.setDate(today.getDate() - 30);
-                if (first.createdAt > oneMonthAgo) {
-                    // Set lock
-                    const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-                    await lockUserOut(user, oneMonth);
-                    return res.status(403).json({
-                        message: 'You have been locked out for a month due to four unresolved consultations.',
-                    });
+            // if there are no recent consultations, skip the checks
+            if (recentConsultations) {
+                const [first, second, third, fourth] = recentConsultations;
+                // if there are less than 2 consultations, skip the checks
+                if (recentConsultations.length > 2) {
+                    const twoCancelled = await verifyTwoCancelled([first, second]);
+                    const today = new Date();
+                    if (twoCancelled) {
+                        const oneWeekAgo = new Date();
+                        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                        if (first.createdAt > oneWeekAgo) {
+                            // Set lock
+                            const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                            await lockUserOut(user, oneWeek);
+                            return res.status(403).json({
+                                message: 'You are locked out for 1 week due to having cancelled twice in a row.',
+                            });
+                        }
+                    }
+                    // 4. Guard: Consecutive Unresolved Consultations Lockout
+                    const threeUnresolved = await verifyThreeUnresolved([
+                        first,
+                        second,
+                        third,
+                    ]);
+                    if (threeUnresolved) {
+                        const oneWeekAgo = new Date();
+                        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                        if (first.createdAt > oneWeekAgo) {
+                            // Set lock
+                            const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                            await lockUserOut(user, oneWeek);
+                            return res.status(403).json({
+                                message: 'You are temporarily locked out due to three unresolved consultations.',
+                            });
+                        }
+                    }
+                    // 5. Guard: 4 Consecutive Cancellation Lockout (one month)
+                    const fourCancelled = await verifyFourCancelled(recentConsultations);
+                    if (fourCancelled) {
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setDate(today.getDate() - 30);
+                        if (first.createdAt > oneMonthAgo) {
+                            // Set lock
+                            const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                            await lockUserOut(user, oneMonth);
+                            return res.status(403).json({
+                                message: 'You have been locked out for a month due to four cancelled consultations.',
+                            });
+                        }
+                    }
+                    // 6. Guard: 4 consecutive Cancellation Lockout (one month)
+                    const fourUnresolved = await verifyFourUnresolved(recentConsultations);
+                    if (fourUnresolved) {
+                        const oneMonthAgo = new Date();
+                        oneMonthAgo.setDate(today.getDate() - 30);
+                        if (first.createdAt > oneMonthAgo) {
+                            // Set lock
+                            const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                            await lockUserOut(user, oneMonth);
+                            return res.status(403).json({
+                                message: 'You have been locked out for a month due to four unresolved consultations.',
+                            });
+                        }
+                    }
                 }
             }
             const newConsultation = await createNewConsultation({
