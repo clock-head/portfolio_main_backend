@@ -8,7 +8,7 @@ import { ConsultationPayload } from '../types/Consultation';
 // Get recent consultations for a user
 
 async function getRecentConsultations(userId: number, limit = 2) {
-  return require('../models/Consultation.model').Consultation.findAll({
+  return require('../models/consultation.model').Consultation.findAll({
     where: { user_id: userId },
     order: [['created_at', 'DESC']],
     limit,

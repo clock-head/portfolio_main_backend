@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 // const { User, Session } = require('../models');
-import { User } from '../models/user.model';
-import { Session } from '../models/session.model';
+import { User, Session } from '../models';
 import { UserPayload, SignupBody } from '../types/User';
 import { CreationAttributes } from 'sequelize';
 import { Request, Response } from 'express';

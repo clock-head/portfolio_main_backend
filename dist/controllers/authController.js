@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 // const { User, Session } = require('../models');
-const user_model_1 = require("../models/user.model");
-const session_model_1 = require("../models/session.model");
+const models_1 = require("../models");
 const zod_1 = require("zod");
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 const signupSchema = zod_1.z.object({
@@ -21,7 +20,7 @@ module.exports = {
         }
         const { email, password, firstName, lastName } = validation.data;
         try {
-            const existing = await user_model_1.User.findOne({ where: { email } });
+            const existing = await models_1.User.findOne({ where: { email } });
             if (existing)
                 return res.status(409).json({ message: 'Email already in use.' });
             const passwordHash = await bcrypt.hash(password, 12);
@@ -32,18 +31,18 @@ module.exports = {
                 lastName: lastName,
                 isAdmin: false,
             };
-            const newUser = await user_model_1.User.create(payload);
+            const newUser = await models_1.User.create(payload);
             return res.status(201).json({ message: 'User created successfully.' });
         }
         catch (err) {
-            console.log(user_model_1.User);
+            console.log(models_1.User);
             return res.status(500).json({ error: `Internal server error: ${err}` });
         }
     },
     login: async (req, res) => {
         const { email, password } = req.body;
         try {
-            const user = await user_model_1.User.findOne({ where: { email } });
+            const user = await models_1.User.findOne({ where: { email } });
             if (!user)
                 return res.status(404).json({ message: 'User not found.' });
             const match = await bcrypt.compare(password, user.passwordHash);
@@ -52,7 +51,7 @@ module.exports = {
             const token = crypto.randomBytes(64).toString('hex');
             const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
             const expiresAt = new Date(Date.now() + SESSION_DURATION);
-            await session_model_1.Session.create({ user_id: user.user_id, tokenHash, expiresAt });
+            await models_1.Session.create({ user_id: user.user_id, tokenHash, expiresAt });
             res.cookie('session_token', token, {
                 httpOnly: true,
                 maxAge: SESSION_DURATION,
@@ -73,7 +72,7 @@ module.exports = {
             .createHash('sha256')
             .update(rawToken)
             .digest('hex');
-        await session_model_1.Session.destroy({ where: { tokenHash } });
+        await models_1.Session.destroy({ where: { tokenHash } });
         res.clearCookie('session_token');
         return res.status(200).json({ message: 'Logged out successfully.' });
     },
@@ -86,11 +85,11 @@ module.exports = {
                 .createHash('sha256')
                 .update(rawToken)
                 .digest('hex');
-            const session = await session_model_1.Session.findOne({ where: { tokenHash } });
+            const session = await models_1.Session.findOne({ where: { tokenHash } });
             if (!session || new Date() > session.expiresAt) {
                 return res.status(401).json({ message: 'Session expired or invalid.' });
             }
-            const user = await user_model_1.User.findByPk(session.user_id, {
+            const user = await models_1.User.findByPk(session.user_id, {
                 attributes: ['user_id', 'email', 'username', 'createdAt'],
             });
             if (!user) {

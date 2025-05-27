@@ -25,8 +25,6 @@ const {
   lockUserOut,
 } = require('../services/consultationService');
 
-const { Consultation } = require('../models/consultation.model');
-
 import { IUser } from '../types/User';
 
 const { Op } = require('sequelize');

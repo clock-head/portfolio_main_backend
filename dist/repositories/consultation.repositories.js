@@ -5,7 +5,7 @@ const { Work_Sprint } = require('../models');
 const { Op, CreationAttributes } = require('sequelize');
 // Get recent consultations for a user
 async function getRecentConsultations(userId, limit = 2) {
-    return require('../models/Consultation.model').Consultation.findAll({
+    return require('../models/consultation.model').Consultation.findAll({
         where: { user_id: userId },
         order: [['created_at', 'DESC']],
         limit,

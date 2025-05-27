@@ -7,7 +7,7 @@ import { WorkSprint } from './worksprint.model';
 
 require('dotenv').config();
 
-export const sequelize = new Sequelize({
+const sequelize = new Sequelize({
   dialect: 'postgres',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),
@@ -26,3 +26,5 @@ export const sequelize = new Sequelize({
   },
   models: [User, Session, Consultation, JobBooking, WorkSprint], // Add all models here
 });
+
+export { sequelize, User, Session, Consultation, JobBooking, WorkSprint };
