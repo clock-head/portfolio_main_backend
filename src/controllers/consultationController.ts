@@ -155,6 +155,8 @@ module.exports = {
         }
       }
 
+      console.log(user);
+
       const newConsultation = await createNewConsultation({
         userId: user?.user_id,
         name,

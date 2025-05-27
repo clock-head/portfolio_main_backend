@@ -59,7 +59,7 @@ export class Consultation extends Model<
   @Column({ type: DataType.TIME, field: 'has_rescheduled' })
   hasRescheduled!: boolean;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.TIME)
   notes!: string;
 

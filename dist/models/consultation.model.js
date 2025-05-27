@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Consultation.prototype, "hasRescheduled", void 0);
 __decorate([
-    (0, sequelize_typescript_1.AllowNull)(false),
+    (0, sequelize_typescript_1.AllowNull)(true),
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.TIME),
     __metadata("design:type", String)
 ], Consultation.prototype, "notes", void 0);
