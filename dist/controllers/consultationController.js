@@ -100,11 +100,8 @@ module.exports = {
                     }
                 }
             }
-            console.log(user);
-            const newConsultation = await createNewConsultation({
+            const consultation = {
                 userId: user?.user_id,
-                name,
-                email,
                 selectedDate: selectedDate,
                 startTime: startTime,
                 endTime: endTime,
@@ -112,7 +109,8 @@ module.exports = {
                 resolutionStatus: 'open',
                 hasRescheduled: false,
                 notes: null,
-            });
+            };
+            const newConsultation = await createNewConsultation(consultation);
             return res
                 .status(201)
                 .json({ message: 'Booking created successfully.', newConsultation });
