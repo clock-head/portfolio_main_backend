@@ -113,7 +113,7 @@ module.exports = {
         }
         catch (err) {
             console.error('[Create Booking Error]', err);
-            return res.status(500).json({ message: 'Internal server error.' });
+            return res.status(500).json({ message: `Internal server error ${err}.` });
         }
     },
     getUserConsultation: async (req, res) => {

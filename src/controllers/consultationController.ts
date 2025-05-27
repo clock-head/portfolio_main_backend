@@ -163,7 +163,7 @@ module.exports = {
         .json({ message: 'Booking created successfully.', newConsultation });
     } catch (err) {
       console.error('[Create Booking Error]', err);
-      return res.status(500).json({ message: 'Internal server error.' });
+      return res.status(500).json({ message: `Internal server error ${err}.` });
     }
   },
 
