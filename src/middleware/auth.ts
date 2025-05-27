@@ -29,7 +29,7 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     // Attach user object to request
     req.user = session.User;
     req.session = session;
-    console.log(req.user);
+    console.log('auth middle level user', req.user);
     next();
   } catch (err) {
     console.error('[Auth Middleware Error]', err);
