@@ -13,8 +13,16 @@ async function getConsultationByPk(consultationId: number) {
 }
 
 async function getRecentConsultations(userId: number, limit = 2) {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+
   return Consultation.findAll({
-    where: { userId: userId },
+    where: {
+      userId: userId,
+      createdAt: {
+        [Op.gte]: oneMonthAgo,
+      },
+    },
     order: [['created_at', 'DESC']],
     limit,
   });
@@ -22,8 +30,11 @@ async function getRecentConsultations(userId: number, limit = 2) {
 
 // 🔍 Get user's recent attended consultations (for indecision check)
 async function getRecentAttendedConsultations(userId: number, limit = 2) {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+
   return require('../models/consultation.model').Consultation.findAll({
-    where: { user_id: userId, status: 'attended' },
+    where: { user_id: userId, resolutionStatus: 'attended' },
     order: [['created_at', 'DESC']],
     limit,
   });
@@ -56,11 +67,21 @@ async function getActiveConsultation(userId: number) {
   });
 }
 
-async function getAttendedConsultations(userId: number, limit = 2) {
+async function getAttendedConsultations(
+  userId: number,
+  timeFrameInDays: number,
+  limit = 2
+) {
+  const xDaysAgo = new Date();
+  xDaysAgo.setDate(xDaysAgo.getDate() - timeFrameInDays);
+
   return require('../models/consultation.model').Consultation.findAll({
     where: {
       user_id: userId,
-      resolutionStatus: 'attended',
+      resolutionStatus: { [Op.in]: ['open', 'resolved'] },
+      createdAt: {
+        [Op.gte]: xDaysAgo,
+      },
     },
     order: [['created_at', 'DESC']],
     limit,
@@ -72,7 +93,7 @@ async function getUserConsultation(userId: number) {
     where: {
       user_id: userId,
       resolutionStatus: {
-        [Op.in]: ['pending', 'confirmed', 'attended', 'cancelled', 'open'],
+        [Op.in]: ['pending', 'confirmed', 'cancelled', 'open', 'resolved'],
       },
     },
   });

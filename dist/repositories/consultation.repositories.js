@@ -9,16 +9,25 @@ async function getConsultationByPk(consultationId) {
     return models_1.Consultation.findByPk(consultationId);
 }
 async function getRecentConsultations(userId, limit = 2) {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
     return models_1.Consultation.findAll({
-        where: { userId: userId },
+        where: {
+            userId: userId,
+            createdAt: {
+                [Op.gte]: oneMonthAgo,
+            },
+        },
         order: [['created_at', 'DESC']],
         limit,
     });
 }
 // 🔍 Get user's recent attended consultations (for indecision check)
 async function getRecentAttendedConsultations(userId, limit = 2) {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
     return require('../models/consultation.model').Consultation.findAll({
-        where: { user_id: userId, status: 'attended' },
+        where: { user_id: userId, resolutionStatus: 'attended' },
         order: [['created_at', 'DESC']],
         limit,
     });
@@ -47,11 +56,16 @@ async function getActiveConsultation(userId) {
         },
     });
 }
-async function getAttendedConsultations(userId, limit = 2) {
+async function getAttendedConsultations(userId, timeFrameInDays, limit = 2) {
+    const xDaysAgo = new Date();
+    xDaysAgo.setDate(xDaysAgo.getDate() - timeFrameInDays);
     return require('../models/consultation.model').Consultation.findAll({
         where: {
             user_id: userId,
-            resolutionStatus: 'attended',
+            resolutionStatus: { [Op.in]: ['open', 'resolved'] },
+            createdAt: {
+                [Op.gte]: xDaysAgo,
+            },
         },
         order: [['created_at', 'DESC']],
         limit,
@@ -62,7 +76,7 @@ async function getUserConsultation(userId) {
         where: {
             user_id: userId,
             resolutionStatus: {
-                [Op.in]: ['pending', 'confirmed', 'attended', 'cancelled', 'open'],
+                [Op.in]: ['pending', 'confirmed', 'cancelled', 'open', 'resolved'],
             },
         },
     });
