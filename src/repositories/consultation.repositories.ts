@@ -34,7 +34,7 @@ async function getConfirmedConsultationsForDate(date: string) {
   return require('../models/consultation.model').Consultation.findAll({
     where: {
       selectedDate: date,
-      status: 'confirmed',
+      resolutionStatus: 'confirmed',
     },
   });
 }
@@ -51,7 +51,7 @@ async function getActiveConsultation(userId: number) {
   return require('../models/consultation.model').Consultation.findOne({
     where: {
       user_id: userId,
-      status: { [Op.in]: ['pending', 'confirmed'] },
+      resolutionStatus: { [Op.in]: ['pending', 'confirmed'] },
     },
   });
 }
@@ -60,7 +60,7 @@ async function getAttendedConsultations(userId: number, limit = 2) {
   return require('../models/consultation.model').Consultation.findAll({
     where: {
       user_id: userId,
-      status: 'attended',
+      resolutionStatus: 'attended',
     },
     order: [['created_at', 'DESC']],
     limit,
@@ -71,7 +71,9 @@ async function getUserConsultation(userId: number) {
   return require('../models/consultation.model').Consultation.findOne({
     where: {
       user_id: userId,
-      status: { [Op.in]: ['pending', 'confirmed', 'attended', 'cancelled'] },
+      resolutionStatus: {
+        [Op.in]: ['pending', 'confirmed', 'attended', 'cancelled', 'open'],
+      },
     },
   });
 }

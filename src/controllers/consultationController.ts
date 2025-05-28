@@ -162,8 +162,7 @@ module.exports = {
         selectedDate: selectedDate,
         startTime: startTime,
         endTime: endTime,
-        status: 'pending',
-        resolutionStatus: 'open',
+        resolutionStatus: 'pending',
         hasRescheduled: false,
         notes: null,
       };
@@ -183,7 +182,13 @@ module.exports = {
     const { consultationId } = req.params;
     const { status } = req.query;
 
-    const allowedStatuses = ['pending', 'confirmed', 'resolved', 'open'];
+    const allowedStatuses = [
+      'pending',
+      'confirmed',
+      'cancelled',
+      'resolved',
+      'open',
+    ];
 
     if (
       !status ||

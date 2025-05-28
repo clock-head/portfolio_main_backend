@@ -47,16 +47,22 @@ export class Consultation extends Model<
   endTime!: string;
 
   @AllowNull(false)
-  @Default('pending')
-  @Column(DataType.STRING)
-  status!: string;
-
-  @AllowNull(false)
   @Column({
-    type: DataType.ENUM('pending', 'confirmed', 'resolved', 'open'),
+    type: DataType.ENUM(
+      'pending',
+      'confirmed',
+      'cancelled',
+      'resolved',
+      'open'
+    ),
     field: 'resolution_status',
   })
-  resolutionStatus!: 'pending' | 'confirmed' | 'resolved' | 'open';
+  resolutionStatus!:
+    | 'pending'
+    | 'confirmed'
+    | 'cancelled'
+    | 'resolved'
+    | 'open';
 
   @AllowNull(false)
   @Column({ type: DataType.BOOLEAN, field: 'has_rescheduled' })

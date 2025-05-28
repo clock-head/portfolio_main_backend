@@ -2,7 +2,7 @@ import { Consultation } from '../models/consultation.model';
 import { User } from '../models/user.model';
 
 async function cancelActiveConsultation(consultation: Consultation) {
-  consultation.status = 'cancelled';
+  consultation.resolutionStatus = 'cancelled';
   await consultation.save();
   return consultation;
 }
@@ -17,7 +17,10 @@ async function verifyTwoCancelled(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 2) return false;
   const [first, second] = recentConsultations;
 
-  return first.status === 'cancelled' && second.status === 'cancelled';
+  return (
+    first.resolutionStatus === 'cancelled' &&
+    second.resolutionStatus === 'cancelled'
+  );
 }
 
 async function verifyTwoUnresolved(recentConsultations: Array<Consultation>) {
@@ -44,10 +47,10 @@ async function verifyFourCancelled(recentConsultations: Array<Consultation>) {
   const [first, second, third, fourth] = recentConsultations;
 
   return (
-    first.status === 'cancelled' &&
-    second.status === 'cancelled' &&
-    third.status === 'cancelled' &&
-    fourth.status === 'cancelled'
+    first.resolutionStatus === 'cancelled' &&
+    second.resolutionStatus === 'cancelled' &&
+    third.resolutionStatus === 'cancelled' &&
+    fourth.resolutionStatus === 'cancelled'
   );
 }
 

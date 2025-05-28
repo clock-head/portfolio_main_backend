@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 async function cancelActiveConsultation(consultation) {
-    consultation.status = 'cancelled';
+    consultation.resolutionStatus = 'cancelled';
     await consultation.save();
     return consultation;
 }
@@ -14,7 +14,8 @@ async function verifyTwoCancelled(recentConsultations) {
     if (recentConsultations.length < 2)
         return false;
     const [first, second] = recentConsultations;
-    return first.status === 'cancelled' && second.status === 'cancelled';
+    return (first.resolutionStatus === 'cancelled' &&
+        second.resolutionStatus === 'cancelled');
 }
 async function verifyTwoUnresolved(recentConsultations) {
     if (recentConsultations.length < 2)
@@ -34,10 +35,10 @@ async function verifyFourCancelled(recentConsultations) {
     if (recentConsultations.length < 4)
         return false;
     const [first, second, third, fourth] = recentConsultations;
-    return (first.status === 'cancelled' &&
-        second.status === 'cancelled' &&
-        third.status === 'cancelled' &&
-        fourth.status === 'cancelled');
+    return (first.resolutionStatus === 'cancelled' &&
+        second.resolutionStatus === 'cancelled' &&
+        third.resolutionStatus === 'cancelled' &&
+        fourth.resolutionStatus === 'cancelled');
 }
 async function verifyFourUnresolved(recentConsultations) {
     if (recentConsultations.length < 4)

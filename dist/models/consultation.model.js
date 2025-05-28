@@ -43,14 +43,8 @@ __decorate([
 ], Consultation.prototype, "endTime", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Default)('pending'),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
-    __metadata("design:type", String)
-], Consultation.prototype, "status", void 0);
-__decorate([
-    (0, sequelize_typescript_1.AllowNull)(false),
     (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.ENUM('pending', 'confirmed', 'resolved', 'open'),
+        type: sequelize_typescript_1.DataType.ENUM('pending', 'confirmed', 'cancelled', 'resolved', 'open'),
         field: 'resolution_status',
     }),
     __metadata("design:type", String)
