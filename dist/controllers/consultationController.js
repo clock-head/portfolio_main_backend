@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_utils_1 = require("../utils/consultation.utils");
-const { getConfirmedConsultationsForDate, getWorkSprintsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
+const { getConsultationByPk, getConfirmedConsultationsForDate, getWorkSprintsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
 const { Op } = require('sequelize');
 module.exports = {
     createConsultation: async (req, res) => {
         // typescript compiler is looking for a user object here
         try {
-            const { selectedDate, startTime, endTime, name, email } = req.body;
+            const { selectedDate, startTime, endTime } = req.body;
             const user = req.user;
             // 1. Guard: Lockout Check
             if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
@@ -23,6 +23,7 @@ module.exports = {
                     message: 'You already have an active consultation booking.',
                     options: {
                         prompt: 'Would you like to reschedule?',
+                        // for the frontend
                         choices: [
                             { label: 'Reschedule', action: 'reschedule' },
                             { label: 'Keep current timeslot', action: 'close_window' },
@@ -37,7 +38,7 @@ module.exports = {
             if (recentConsultations) {
                 const [first, second, third, fourth] = recentConsultations;
                 // if there are less than 2 consultations, skip the checks
-                if (recentConsultations.length > 2) {
+                if (first && second) {
                     const twoCancelled = await verifyTwoCancelled([first, second]);
                     const today = new Date();
                     if (twoCancelled) {
@@ -118,6 +119,34 @@ module.exports = {
         catch (err) {
             console.error('[Create Booking Error]', err);
             return res.status(500).json({ message: `Internal server error ${err}.` });
+        }
+    },
+    changeConsultationStatus: async (req, res) => {
+        const { consultationId } = req.params;
+        const { status } = req.query;
+        const allowedStatuses = ['pending', 'confirmed', 'resolved', 'open'];
+        if (!status ||
+            typeof status !== 'string' ||
+            !allowedStatuses.includes(status)) {
+            return res
+                .status(400)
+                .json({ message: 'Invalid or missing status value.' });
+        }
+        try {
+            const consultation = await getConsultationByPk(consultationId);
+            if (!consultation) {
+                return res.status(404).json({ message: 'Consultation not found.' });
+            }
+            consultation.resolutionStatus = status;
+            await consultation.save();
+            return res.status(200).json({
+                message: 'Consultation status updated successfully.',
+                updatedStatus: consultation.resolutionStatus,
+            });
+        }
+        catch (err) {
+            console.error('[Change Status Error]', err);
+            return res.status(500).json({ message: 'Internal server error.' });
         }
     },
     getUserConsultation: async (req, res) => {

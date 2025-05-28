@@ -5,6 +5,9 @@ const { Work_Sprint } = require('../models');
 const { Op, CreationAttributes } = require('sequelize');
 const models_1 = require("../models");
 // Get recent consultations for a user
+async function getConsultationByPk(consultationId) {
+    return models_1.Consultation.findByPk(consultationId);
+}
 async function getRecentConsultations(userId, limit = 2) {
     return models_1.Consultation.findAll({
         where: { userId: userId },
@@ -74,6 +77,7 @@ async function rescheduleConsultation(consultation, newDate, newStartTime, newEn
     return consultation.save();
 }
 module.exports = {
+    getConsultationByPk,
     getRecentConsultations,
     getRecentAttendedConsultations,
     getConfirmedConsultationsForDate,

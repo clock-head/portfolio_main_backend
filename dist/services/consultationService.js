@@ -14,7 +14,6 @@ async function verifyTwoCancelled(recentConsultations) {
     if (recentConsultations.length < 2)
         return false;
     const [first, second] = recentConsultations;
-    console.log(recentConsultations);
     return first.status === 'cancelled' && second.status === 'cancelled';
 }
 async function verifyTwoUnresolved(recentConsultations) {

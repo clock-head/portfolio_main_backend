@@ -16,7 +16,7 @@ async function lockUserOut(user: User, duration: Date) {
 async function verifyTwoCancelled(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 2) return false;
   const [first, second] = recentConsultations;
-  console.log(recentConsultations);
+
   return first.status === 'cancelled' && second.status === 'cancelled';
 }
 
@@ -31,6 +31,7 @@ async function verifyTwoUnresolved(recentConsultations: Array<Consultation>) {
 async function verifyThreeUnresolved(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 3) return false;
   const [first, second, third] = recentConsultations;
+
   return (
     first.resolutionStatus === 'open' &&
     second.resolutionStatus === 'open' &&
@@ -41,6 +42,7 @@ async function verifyThreeUnresolved(recentConsultations: Array<Consultation>) {
 async function verifyFourCancelled(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 4) return false;
   const [first, second, third, fourth] = recentConsultations;
+
   return (
     first.status === 'cancelled' &&
     second.status === 'cancelled' &&
@@ -52,6 +54,7 @@ async function verifyFourCancelled(recentConsultations: Array<Consultation>) {
 async function verifyFourUnresolved(recentConsultations: Array<Consultation>) {
   if (recentConsultations.length < 4) return false;
   const [first, second, third, fourth] = recentConsultations;
+
   return (
     first.resolutionStatus === 'open' &&
     second.resolutionStatus === 'open' &&

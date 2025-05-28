@@ -52,11 +52,14 @@ export class Consultation extends Model<
   status!: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TIME, field: 'resolution_status' })
-  resolutionStatus!: string;
+  @Column({
+    type: DataType.ENUM('pending', 'confirmed', 'resolved', 'open'),
+    field: 'resolution_status',
+  })
+  resolutionStatus!: 'pending' | 'confirmed' | 'resolved' | 'open';
 
   @AllowNull(false)
-  @Column({ type: DataType.TIME, field: 'has_rescheduled' })
+  @Column({ type: DataType.BOOLEAN, field: 'has_rescheduled' })
   hasRescheduled!: boolean;
 
   @AllowNull(true)

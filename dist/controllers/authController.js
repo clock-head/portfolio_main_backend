@@ -29,7 +29,7 @@ module.exports = {
                 passwordHash: passwordHash,
                 firstName: firstName,
                 lastName: lastName,
-                isAdmin: false,
+                isAdmin: true,
             };
             const newUser = await models_1.User.create(payload);
             return res.status(201).json({ message: 'User created successfully.' });

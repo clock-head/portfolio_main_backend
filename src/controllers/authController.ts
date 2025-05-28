@@ -38,7 +38,7 @@ module.exports = {
         passwordHash: passwordHash,
         firstName: firstName,
         lastName: lastName,
-        isAdmin: false,
+        isAdmin: true,
       };
 
       const newUser = await User.create(payload);

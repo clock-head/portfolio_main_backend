@@ -8,6 +8,10 @@ import { ConsultationPayload } from '../types/Consultation';
 
 // Get recent consultations for a user
 
+async function getConsultationByPk(consultationId: number) {
+  return Consultation.findByPk(consultationId);
+}
+
 async function getRecentConsultations(userId: number, limit = 2) {
   return Consultation.findAll({
     where: { userId: userId },
@@ -97,6 +101,7 @@ async function rescheduleConsultation(
 }
 
 module.exports = {
+  getConsultationByPk,
   getRecentConsultations,
   getRecentAttendedConsultations,
   getConfirmedConsultationsForDate,

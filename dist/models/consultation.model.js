@@ -49,12 +49,15 @@ __decorate([
 ], Consultation.prototype, "status", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.TIME, field: 'resolution_status' }),
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.ENUM('pending', 'confirmed', 'resolved', 'open'),
+        field: 'resolution_status',
+    }),
     __metadata("design:type", String)
 ], Consultation.prototype, "resolutionStatus", void 0);
 __decorate([
     (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.TIME, field: 'has_rescheduled' }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, field: 'has_rescheduled' }),
     __metadata("design:type", Boolean)
 ], Consultation.prototype, "hasRescheduled", void 0);
 __decorate([
