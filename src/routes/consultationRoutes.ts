@@ -18,7 +18,7 @@ router.get(
 router.post('/create', requireAuth, consultationController.createConsultation);
 
 // Change Consultation status
-router.post(
+router.patch(
   '/change-consultation-status',
   requireOperatorAuth,
   consultationController.changeConsultationStatus
