@@ -15,7 +15,7 @@ router.get('/available-timeslots', consultationController.getAvailableTimeSlots)
 // Submit a new booking (guarded by auth middleware)
 router.post('/create', requireAuth, consultationController.createConsultation);
 // Change Consultation status
-router.patch('/change-consultation-status', requireOperatorAuth, consultationController.changeConsultationStatus);
+router.patch('/change-consultation-status/:consultationId', requireOperatorAuth, consultationController.changeConsultationStatus);
 // (Optional) Get current user's booking
 router.get('/my-consultation', requireAuth, consultationController.getUserConsultation);
 // (Optional) Cancel a booking

@@ -19,7 +19,7 @@ router.post('/create', requireAuth, consultationController.createConsultation);
 
 // Change Consultation status
 router.patch(
-  '/change-consultation-status',
+  '/change-consultation-status/:consultationId',
   requireOperatorAuth,
   consultationController.changeConsultationStatus
 );
