@@ -41,6 +41,7 @@ module.exports = {
 
       // 1. Guard: Lockout Check
       if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
+        console.log(Date.now());
         return res.status(403).json({
           message:
             'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
@@ -90,7 +91,14 @@ module.exports = {
 
             if (first.createdAt > oneWeekAgo) {
               // Set lock
-              const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+              // for testing
+              const sevenMinutes = 7 * 60 * 1000;
+
+              // for
+              const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+              const oneWeek = new Date(Date.now() + sevenMinutes);
               await lockUserOut(user, oneWeek);
               return res.status(403).json({
                 message:
@@ -111,8 +119,13 @@ module.exports = {
               const oneWeekAgo = new Date();
               oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
               if (first.createdAt > oneWeekAgo) {
+                // for testing
+                const sevenMinutes = 7 * 60 * 1000;
+
+                // for
+                const sevenDays = 7 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                const oneWeek = new Date(Date.now() + sevenMinutes);
                 await lockUserOut(user, oneWeek);
                 return res.status(403).json({
                   message:
@@ -132,10 +145,12 @@ module.exports = {
               const oneMonthAgo = new Date();
               oneMonthAgo.setDate(today.getDate() - 30);
               if (first.createdAt > oneMonthAgo) {
+                const sevenMinutes = 7 * 60 * 1000;
+
+                // for
+                const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = new Date(
-                  Date.now() + 30 * 24 * 60 * 60 * 1000
-                );
+                const oneMonth = new Date(Date.now() + sevenMinutes);
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:
@@ -153,10 +168,12 @@ module.exports = {
               const oneMonthAgo = new Date();
               oneMonthAgo.setDate(today.getDate() - 30);
               if (first.createdAt > oneMonthAgo) {
+                const sevenMinutes = 7 * 60 * 1000;
+
+                // for
+                const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = new Date(
-                  Date.now() + 30 * 24 * 60 * 60 * 1000
-                );
+                const oneMonth = new Date(Date.now() + sevenMinutes);
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:
