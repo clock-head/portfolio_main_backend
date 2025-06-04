@@ -12,7 +12,9 @@ module.exports = {
             const user = req.user;
             // 1. Guard: Lockout Check
             if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
-                console.log(Date.now());
+                console.log(new Date(Date.now()).toISOString());
+                console.log(new Date(Date.now()).getTime());
+                console.log(new Date(Date.now()).toLocaleString());
                 return res.status(403).json({
                     message: 'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
                 });
