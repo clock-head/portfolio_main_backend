@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_utils_1 = require("../utils/consultation.utils");
 const { getConsultationByPk, getConfirmedConsultationsForDate, getWorkSprintsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
+const { utcToZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 module.exports = {
     createConsultation: async (req, res) => {
@@ -10,11 +11,12 @@ module.exports = {
         try {
             const { selectedDate, startTime, endTime } = req.body;
             const user = req.user;
+            const utcDate = new Date();
+            const timeZone = 'Australia/Sydney';
+            const localDate = utcToZonedTime(utcDate, timeZone);
             // 1. Guard: Lockout Check
-            if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
-                console.log(new Date(Date.now()).toISOString());
-                console.log(new Date(Date.now()).getTime());
-                console.log(new Date(Date.now()).toLocaleString());
+            if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
+                console.log(localDate);
                 return res.status(403).json({
                     message: 'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
                 });

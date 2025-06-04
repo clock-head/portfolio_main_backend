@@ -27,7 +27,7 @@ const {
 } = require('../services/consultationService');
 
 import { IUser } from '../types/User';
-
+const { utcToZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 
 import { Request, Response } from 'express';
@@ -38,12 +38,14 @@ module.exports = {
     try {
       const { selectedDate, startTime, endTime } = req.body;
       const user = req.user;
+      const utcDate = new Date();
+      const timeZone = 'Australia/Sydney';
+
+      const localDate = utcToZonedTime(utcDate, timeZone);
 
       // 1. Guard: Lockout Check
-      if (user?.lockedUntil && new Date(user?.lockedUntil) > new Date()) {
-        console.log(new Date(Date.now()).toISOString());
-        console.log(new Date(Date.now()).getTime());
-        console.log(new Date(Date.now()).toLocaleString());
+      if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
+        console.log(localDate);
         return res.status(403).json({
           message:
             'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
