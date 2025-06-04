@@ -27,7 +27,7 @@ const {
 } = require('../services/consultationService');
 
 import { IUser } from '../types/User';
-const { formatInTimeZone, format } = require('date-fns-tz');
+const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 
 import { Request, Response } from 'express';
@@ -36,23 +36,21 @@ module.exports = {
   createConsultation: async (req: Request, res: Response) => {
     // typescript compiler is looking for a user object here
     try {
-      const { selectedDate, startTime, endTime } = req.body;
+      const { selectedDate, startTime, endTime, timeZone } = req.body;
       const user = req.user;
       const utcDate = new Date();
-      const timeZone = 'Australia/Sydney';
+      // const timeZone = 'Australia/Sydney';
 
-      const localDate = formatInTimeZone(
-        utcDate,
+      const localDate = toZonedTime(utcDate, timeZone);
+      const localDateFormatted = format(localDate, 'yyyy-MM-dd HH:mm:ssXXX', {
         timeZone,
-        "yyyy-MM-dd HH:mm:ss' n 'XXX"
-      );
+      });
+
+      console.log(localDateFormatted);
 
       // 1. Guard: Lockout Check
-      if (
-        user?.lockedUntil &&
-        new Date(user?.lockedUntil) > new Date(localDate)
-      ) {
-        console.log(localDate);
+      if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
+        // console.log(localDate);
         return res.status(403).json({
           message:
             'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
@@ -94,10 +92,10 @@ module.exports = {
 
         if (first && second) {
           const twoCancelled = await verifyTwoCancelled([first, second]);
-          const today = new Date();
+          const today = localDate;
 
           if (twoCancelled) {
-            const oneWeekAgo = new Date();
+            const oneWeekAgo = localDate;
             oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
             if (first.createdAt > oneWeekAgo) {
@@ -109,7 +107,7 @@ module.exports = {
               // for
               const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-              const oneWeek = new Date(Date.now() + sevenMinutes);
+              const oneWeek = localDate.valueOf() + sevenMinutes;
               await lockUserOut(user, oneWeek);
               return res.status(403).json({
                 message:
@@ -127,7 +125,7 @@ module.exports = {
               third,
             ]);
             if (threeUnresolved) {
-              const oneWeekAgo = new Date();
+              const oneWeekAgo = localDate;
               oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
               if (first.createdAt > oneWeekAgo) {
                 // for testing
@@ -136,7 +134,7 @@ module.exports = {
                 // for
                 const sevenDays = 7 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneWeek = new Date(Date.now() + sevenMinutes);
+                const oneWeek = localDate.valueOf() + sevenMinutes;
                 await lockUserOut(user, oneWeek);
                 return res.status(403).json({
                   message:
@@ -153,7 +151,7 @@ module.exports = {
               recentConsultations
             );
             if (fourCancelled) {
-              const oneMonthAgo = new Date();
+              const oneMonthAgo = localDate;
               oneMonthAgo.setDate(today.getDate() - 30);
               if (first.createdAt > oneMonthAgo) {
                 const sevenMinutes = 7 * 60 * 1000;
@@ -161,7 +159,7 @@ module.exports = {
                 // for
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = new Date(Date.now() + sevenMinutes);
+                const oneMonth = localDate.valueOf() + sevenMinutes;
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:
@@ -176,7 +174,7 @@ module.exports = {
               recentConsultations
             );
             if (fourUnresolved) {
-              const oneMonthAgo = new Date();
+              const oneMonthAgo = localDate;
               oneMonthAgo.setDate(today.getDate() - 30);
               if (first.createdAt > oneMonthAgo) {
                 const sevenMinutes = 7 * 60 * 1000;
@@ -184,7 +182,7 @@ module.exports = {
                 // for
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = new Date(Date.now() + sevenMinutes);
+                const oneMonth = localDate.valueOf() + sevenMinutes;
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:
