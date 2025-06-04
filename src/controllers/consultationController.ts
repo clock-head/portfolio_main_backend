@@ -46,7 +46,7 @@ module.exports = {
         timeZone,
       });
 
-      console.log(localDateFormatted);
+      // console.log(localDateFormatted);
 
       // 1. Guard: Lockout Check
       if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
@@ -107,7 +107,8 @@ module.exports = {
               // for
               const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-              const oneWeek = localDate.valueOf() + sevenMinutes;
+              const oneWeek = new Date(localDate.valueOf() + sevenMinutes);
+
               await lockUserOut(user, oneWeek);
               return res.status(403).json({
                 message:
@@ -134,7 +135,7 @@ module.exports = {
                 // for
                 const sevenDays = 7 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneWeek = localDate.valueOf() + sevenMinutes;
+                const oneWeek = new Date(localDate.valueOf() + sevenMinutes);
                 await lockUserOut(user, oneWeek);
                 return res.status(403).json({
                   message:
@@ -159,7 +160,7 @@ module.exports = {
                 // for
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = localDate.valueOf() + sevenMinutes;
+                const oneMonth = new Date(localDate.valueOf() + sevenMinutes);
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:
@@ -182,7 +183,7 @@ module.exports = {
                 // for
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
-                const oneMonth = localDate.valueOf() + sevenMinutes;
+                const oneMonth = new Date(localDate.valueOf() + sevenMinutes);
                 await lockUserOut(user, oneMonth);
                 return res.status(403).json({
                   message:

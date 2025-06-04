@@ -17,7 +17,7 @@ module.exports = {
             const localDateFormatted = format(localDate, 'yyyy-MM-dd HH:mm:ssXXX', {
                 timeZone,
             });
-            console.log(localDateFormatted);
+            // console.log(localDateFormatted);
             // 1. Guard: Lockout Check
             if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
                 // console.log(localDate);
@@ -59,7 +59,7 @@ module.exports = {
                             const sevenMinutes = 7 * 60 * 1000;
                             // for
                             const sevenDays = 7 * 24 * 60 * 60 * 1000;
-                            const oneWeek = localDate.valueOf() + sevenMinutes;
+                            const oneWeek = new Date(localDate.valueOf() + sevenMinutes);
                             await lockUserOut(user, oneWeek);
                             return res.status(403).json({
                                 message: 'You are locked out for 1 week due to having cancelled twice in a row.',
@@ -82,7 +82,7 @@ module.exports = {
                                 // for
                                 const sevenDays = 7 * 24 * 60 * 60 * 1000;
                                 // Set lock
-                                const oneWeek = localDate.valueOf() + sevenMinutes;
+                                const oneWeek = new Date(localDate.valueOf() + sevenMinutes);
                                 await lockUserOut(user, oneWeek);
                                 return res.status(403).json({
                                     message: 'You are temporarily locked out due to three unresolved consultations.',
@@ -101,7 +101,7 @@ module.exports = {
                                 // for
                                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                                 // Set lock
-                                const oneMonth = localDate.valueOf() + sevenMinutes;
+                                const oneMonth = new Date(localDate.valueOf() + sevenMinutes);
                                 await lockUserOut(user, oneMonth);
                                 return res.status(403).json({
                                     message: 'You have been locked out for a month due to four cancelled consultations.',
@@ -118,7 +118,7 @@ module.exports = {
                                 // for
                                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                                 // Set lock
-                                const oneMonth = localDate.valueOf() + sevenMinutes;
+                                const oneMonth = new Date(localDate.valueOf() + sevenMinutes);
                                 await lockUserOut(user, oneMonth);
                                 return res.status(403).json({
                                     message: 'You have been locked out for a month due to four unresolved consultations.',
