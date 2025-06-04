@@ -27,7 +27,7 @@ const {
 } = require('../services/consultationService');
 
 import { IUser } from '../types/User';
-const { utcToZonedTime, format } = require('date-fns-tz');
+const { formatInTimeZone, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 
 import { Request, Response } from 'express';
@@ -41,7 +41,7 @@ module.exports = {
       const utcDate = new Date();
       const timeZone = 'Australia/Sydney';
 
-      const localDate = utcToZonedTime(utcDate, timeZone);
+      const localDate = formatInTimeZone(utcDate, timeZone);
 
       // 1. Guard: Lockout Check
       if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {

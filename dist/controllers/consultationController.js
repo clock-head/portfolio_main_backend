@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_utils_1 = require("../utils/consultation.utils");
 const { getConsultationByPk, getConfirmedConsultationsForDate, getWorkSprintsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
-const { utcToZonedTime, format } = require('date-fns-tz');
+const { formatInTimeZone, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 module.exports = {
     createConsultation: async (req, res) => {
@@ -13,7 +13,7 @@ module.exports = {
             const user = req.user;
             const utcDate = new Date();
             const timeZone = 'Australia/Sydney';
-            const localDate = utcToZonedTime(utcDate, timeZone);
+            const localDate = formatInTimeZone(utcDate, timeZone);
             // 1. Guard: Lockout Check
             if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
                 console.log(localDate);
