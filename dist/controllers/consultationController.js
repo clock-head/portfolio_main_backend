@@ -266,8 +266,10 @@ module.exports = {
         try {
             const user = req.user;
             let isLoggedIn = user;
+            const today = new Date(Date.now());
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
             const year = parseInt(req.query.year, 10); // current year passed in through frontend query params.
+            const day = today.getMonth() === month ? today.getDay() : 1;
             let offsetDays = 0;
             if (isNaN(month) || isNaN(year)) {
                 return res.status(400).json({ message: 'Invalid query parameters.' });
@@ -280,7 +282,7 @@ module.exports = {
                     offsetDays = 3; // Skip 3 calendar days
                 }
             }
-            const startDate = new Date(year, month - 1, 1); // returns a Date object
+            const startDate = new Date(year, month - 1, day); // returns a Date object
             startDate.setDate(startDate.getDate() + offsetDays);
             //Dynamically determine how many days in the selected month
             const daysInMonth = new Date(year, month, 0).getDate() - offsetDays; // does this get a number?
