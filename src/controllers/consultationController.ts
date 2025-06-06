@@ -371,7 +371,7 @@ module.exports = {
 
       const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
       const year = parseInt(req.query.year as string, 10); // current year passed in through frontend query params.
-      const day = today.getMonth() === month ? today.getDay() : 1;
+      const day = today.getMonth() === month - 1 ? today.getDay() : 1;
 
       let offsetDays = 0;
 

@@ -269,7 +269,7 @@ module.exports = {
             const today = new Date(Date.now());
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
             const year = parseInt(req.query.year, 10); // current year passed in through frontend query params.
-            const day = today.getMonth() === month ? today.getDay() : 1;
+            const day = today.getMonth() === month - 1 ? today.getDay() : 1;
             let offsetDays = 0;
             if (isNaN(month) || isNaN(year)) {
                 return res.status(400).json({ message: 'Invalid query parameters.' });
