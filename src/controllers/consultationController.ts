@@ -46,8 +46,6 @@ module.exports = {
         timeZone,
       });
 
-      // console.log(localDateFormatted);
-
       // 1. Guard: Lockout Check
       if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
         // console.log(localDate);
@@ -178,9 +176,10 @@ module.exports = {
               const oneMonthAgo = localDate;
               oneMonthAgo.setDate(today.getDate() - 30);
               if (first.createdAt > oneMonthAgo) {
+                //for testing
                 const sevenMinutes = 7 * 60 * 1000;
 
-                // for
+                // for production
                 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
                 // Set lock
                 const oneMonth = new Date(localDate.valueOf() + sevenMinutes);

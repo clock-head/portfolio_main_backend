@@ -6,11 +6,16 @@ const { requireAuth, requireOperatorAuth } = require('../middleware/auth');
 // Booking Routes
 
 // Get available dates for booking (public)
-router.get('/available-dates', consultationController.getAvailableDates);
+router.get(
+  '/available-dates',
+  requireAuth,
+  consultationController.getAvailableDates
+);
 
 // Get available time slots for a specific date (public)
 router.get(
   '/available-timeslots',
+  requireAuth,
   consultationController.getAvailableTimeSlots
 );
 
