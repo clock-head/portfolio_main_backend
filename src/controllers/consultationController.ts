@@ -366,10 +366,17 @@ module.exports = {
     try {
       const user = req.user;
       let isLoggedIn = user;
+      const utcDate = new Date();
+      const timeZone = req.query.time_zone;
 
-      console.log(req.query.time_zone);
+      const today = toZonedTime(utcDate, timeZone);
+      const localDateFormatted = format(today, 'yyyy-MM-dd HH:mm:ssXXX', {
+        timeZone,
+      });
 
-      const today = new Date(Date.now());
+      // console.log(req.query.time_zone);
+
+      // const today = new Date(Date.now());
       // console.log(today);
 
       const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
