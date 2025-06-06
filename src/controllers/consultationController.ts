@@ -367,7 +367,7 @@ module.exports = {
       const user = req.user;
       let isLoggedIn = user;
 
-      console.log(req.query);
+      console.log(req.query.time_zone);
 
       const today = new Date(Date.now());
       // console.log(today);
