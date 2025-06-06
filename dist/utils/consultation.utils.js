@@ -12,7 +12,7 @@ const generateHourlySlots = () => {
     return slots;
 };
 // ✅ Returns [count] working days starting from [startDate]
-function generateWorkingDays(startDate, daysInMonth) {
+function generateWorkingDays(startDate, daysInMonth, offsetDays) {
     const dates = [];
     const cursor = new Date(startDate); // Date is mutable, and cloning it like this protects the original from being mutated during iteration.
     let count = 0;
@@ -25,7 +25,7 @@ function generateWorkingDays(startDate, daysInMonth) {
         cursor.setDate(cursor.getDate() + 1);
         count++;
     }
-    return dates;
+    return dates.slice(offsetDays, -1);
 }
 // ✅ Checks if the old consultation date is at least 1 working day ahead of now
 function isWorkingDayNotice(oldDate, now = new Date()) {
