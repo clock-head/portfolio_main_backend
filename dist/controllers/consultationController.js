@@ -267,9 +267,10 @@ module.exports = {
             const user = req.user;
             let isLoggedIn = user;
             const today = new Date(Date.now());
+            console.log(today);
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
             const year = parseInt(req.query.year, 10); // current year passed in through frontend query params.
-            const day = today.getMonth() === month - 1 ? today.getDay() : 1;
+            const day = today.getMonth() === month - 1 ? today.getDate() : 1;
             let offsetDays = 0;
             if (isNaN(month) || isNaN(year)) {
                 return res.status(400).json({ message: 'Invalid query parameters.' });
@@ -285,7 +286,7 @@ module.exports = {
             const startDate = new Date(year, month - 1, day); // returns a Date object
             startDate.setDate(startDate.getDate() + offsetDays);
             //Dynamically determine how many days in the selected month
-            const daysInMonth = new Date(year, month, 0).getDate() - offsetDays; // does this get a number?
+            const daysInMonth = new Date(year, month, 0).getDate() - offsetDays - day; // does this get a number?
             const availableDates = (0, consultation_utils_1.generateWorkingDays)(startDate, daysInMonth);
             return res.status(200).json({ availableDates });
         }
