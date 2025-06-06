@@ -377,7 +377,7 @@ module.exports = {
       // console.log(req.query.time_zone);
 
       // const today = new Date(Date.now());
-      // console.log(today);
+      console.log(localDateFormatted);
 
       const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
       const year = parseInt(req.query.year as string, 10); // current year passed in through frontend query params.
