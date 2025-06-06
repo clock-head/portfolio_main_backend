@@ -389,7 +389,7 @@ module.exports = {
 
       //Dynamically determine how many days in the selected month
 
-      const daysInMonth = new Date(year, month, 0).getDate();
+      const daysInMonth = new Date(year, month, 0).getDate() - offsetDays; // does this get a number?
 
       const availableDates = generateWorkingDays(startDate, daysInMonth);
 
