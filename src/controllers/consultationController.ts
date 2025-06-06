@@ -367,8 +367,10 @@ module.exports = {
       const user = req.user;
       let isLoggedIn = user;
 
+      console.log(req);
+
       const today = new Date(Date.now());
-      console.log(today);
+      // console.log(today);
 
       const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
       const year = parseInt(req.query.year as string, 10); // current year passed in through frontend query params.
@@ -396,7 +398,6 @@ module.exports = {
       //Dynamically determine how many days in the selected month
 
       const daysInMonth = new Date(year, month, 0).getDate() - day; // does this get a number?
-      console.log(daysInMonth);
 
       const availableDates = generateWorkingDays(
         startDate,

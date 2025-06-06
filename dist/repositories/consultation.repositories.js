@@ -8,6 +8,7 @@ const models_1 = require("../models");
 async function getConsultationByPk(consultationId) {
     return models_1.Consultation.findByPk(consultationId);
 }
+// used for consultation check.
 async function getRecentConsultations(userId, limit = 2) {
     const oneMonthAgo = new Date();
     oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);

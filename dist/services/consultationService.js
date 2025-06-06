@@ -18,7 +18,6 @@ async function verifyTwoCancelled(recentConsultations) {
         second.resolutionStatus === 'cancelled');
 }
 async function verifyTwoUnresolved(recentConsultations) {
-    console.log(recentConsultations);
     if (recentConsultations.length < 2)
         return false;
     const [first, second] = recentConsultations;

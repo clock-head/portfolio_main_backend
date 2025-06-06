@@ -12,6 +12,7 @@ async function getConsultationByPk(consultationId: number) {
   return Consultation.findByPk(consultationId);
 }
 
+// used for consultation check.
 async function getRecentConsultations(userId: number, limit = 2) {
   const oneMonthAgo = new Date();
   oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
