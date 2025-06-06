@@ -266,7 +266,7 @@ module.exports = {
         try {
             const user = req.user;
             let isLoggedIn = user;
-            console.log(req);
+            console.log(req.query);
             const today = new Date(Date.now());
             // console.log(today);
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
