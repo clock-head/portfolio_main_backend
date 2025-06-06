@@ -28,17 +28,17 @@ async function getRecentConsultations(userId: number, limit = 2) {
   });
 }
 
-// 🔍 Get user's recent attended consultations (for indecision check)
-async function getRecentAttendedConsultations(userId: number, limit = 2) {
-  const oneMonthAgo = new Date();
-  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
+// // 🔍 Get user's recent attended consultations (for indecision check)
+// async function getRecentAttendedConsultations(userId: number, limit = 2) {
+//   const oneMonthAgo = new Date();
+//   oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
 
-  return require('../models/consultation.model').Consultation.findAll({
-    where: { user_id: userId, resolutionStatus: 'attended' },
-    order: [['created_at', 'DESC']],
-    limit,
-  });
-}
+//   return require('../models/consultation.model').Consultation.findAll({
+//     where: { user_id: userId, resolutionStatus: 'attended' },
+//     order: [['created_at', 'DESC']],
+//     limit,
+//   });
+// }
 
 // 📆 Get confirmed consultations for a given date
 async function getConfirmedConsultationsForDate(date: string) {
@@ -126,7 +126,6 @@ async function rescheduleConsultation(
 module.exports = {
   getConsultationByPk,
   getRecentConsultations,
-  getRecentAttendedConsultations,
   getConfirmedConsultationsForDate,
   getWorkSprintsForDate,
   getActiveConsultation,

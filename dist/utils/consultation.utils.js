@@ -25,7 +25,6 @@ function generateWorkingDays(startDate, daysInMonth, offsetDays) {
         cursor.setDate(cursor.getDate() + 1);
         count++;
     }
-    console.log(offsetDays);
     return dates.slice(offsetDays);
 }
 // ✅ Checks if the old consultation date is at least 1 working day ahead of now

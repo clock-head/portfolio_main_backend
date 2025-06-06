@@ -24,6 +24,7 @@ async function verifyTwoCancelled(recentConsultations: Array<Consultation>) {
 }
 
 async function verifyTwoUnresolved(recentConsultations: Array<Consultation>) {
+  console.log(recentConsultations);
   if (recentConsultations.length < 2) return false;
   const [first, second] = recentConsultations;
   return (

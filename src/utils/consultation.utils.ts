@@ -30,8 +30,6 @@ function generateWorkingDays(
     count++;
   }
 
-  console.log(offsetDays);
-
   return dates.slice(offsetDays);
 }
 

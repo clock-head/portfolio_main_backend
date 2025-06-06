@@ -277,7 +277,7 @@ module.exports = {
             }
             //Looped indecision check
             if (isLoggedIn) {
-                const attended = await getAttendedConsultations(user?.user_id, 2);
+                const attended = await getRecentConsultations(user?.user_id, 2);
                 const bothUnresolved = await verifyTwoUnresolved(attended);
                 if (bothUnresolved) {
                     offsetDays = 3; // Skip 3 calendar days
