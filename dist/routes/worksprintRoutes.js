@@ -7,6 +7,6 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const worksprintController = require('../controllers/worksprintController');
 const { requireOperatorAuth } = require('../middleware/auth');
-router.get('/operator=worksprints', requireOperatorAuth, worksprintController.getWorksprintsByDate);
+router.get('/operator-worksprints', requireOperatorAuth, worksprintController.getWorksprintsByDate);
 router.post('/create', requireOperatorAuth, worksprintController.createNewWorksprint);
 module.exports = router;

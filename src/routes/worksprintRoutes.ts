@@ -4,7 +4,7 @@ const worksprintController = require('../controllers/worksprintController');
 const { requireOperatorAuth } = require('../middleware/auth');
 
 router.get(
-  '/operator=worksprints',
+  '/operator-worksprints',
   requireOperatorAuth,
   worksprintController.getWorksprintsByDate
 );
