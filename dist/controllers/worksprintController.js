@@ -8,7 +8,7 @@ module.exports = {
             const dateString = req.query.date
                 ? req.query.date
                 : '';
-            console.log(new Date(dateString));
+            // console.log(new Date(dateString));
             if (!(0, date_fns_1.isValid)(new Date(dateString))) {
                 throw new Error('invalid date format');
             }
@@ -17,7 +17,9 @@ module.exports = {
         }
         catch (error) {
             console.error('[Work Sprint Call Error]', error);
-            return res.status(500).json({ message: 'Internal server error.' });
+            return res
+                .status(500)
+                .json({ message: 'Internal server error.', error: error });
         }
     },
     createNewWorksprint: async (req, res) => {

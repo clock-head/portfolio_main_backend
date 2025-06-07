@@ -11,7 +11,7 @@ module.exports = {
       const dateString: string = req.query.date
         ? (req.query.date as string)
         : '';
-      console.log(new Date(dateString));
+      // console.log(new Date(dateString));
 
       if (!isValid(new Date(dateString))) {
         throw new Error('invalid date format');
@@ -22,7 +22,9 @@ module.exports = {
       return res.status(201).json({ workSprints: workSprints });
     } catch (error) {
       console.error('[Work Sprint Call Error]', error);
-      return res.status(500).json({ message: 'Internal server error.' });
+      return res
+        .status(500)
+        .json({ message: 'Internal server error.', error: error });
     }
   },
 

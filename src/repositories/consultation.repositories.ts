@@ -39,13 +39,6 @@ async function getConfirmedConsultationsForDate(date: string) {
   });
 }
 
-// ⏱ Get work sprints for a given date
-async function getWorkSprintsForDate(date: string) {
-  return require('../models/worksprint.model').WorkSprint.findAll({
-    where: { sprint_date: date },
-  });
-}
-
 // 💡 Get active consultation (pending or confirmed)
 async function getActiveConsultation(userId: number) {
   return require('../models/consultation.model').Consultation.findOne({
@@ -116,7 +109,6 @@ module.exports = {
   getConsultationByPk,
   getRecentConsultations,
   getConfirmedConsultationsForDate,
-  getWorkSprintsForDate,
   getActiveConsultation,
   getAttendedConsultations,
   getUserConsultation,
