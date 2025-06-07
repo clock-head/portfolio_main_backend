@@ -8,10 +8,12 @@ import { isValid } from 'date-fns';
 module.exports = {
   getWorksprintsByDate: async (req: Request, res: Response) => {
     try {
-      const dateString = req.query.date;
-      console.log(dateString);
+      const dateString: string = req.query.date
+        ? (req.query.date as string)
+        : '';
+      console.log(new Date(dateString));
 
-      if (!isValid(dateString)) {
+      if (!isValid(new Date(dateString))) {
         throw new Error('invalid date format');
       }
 

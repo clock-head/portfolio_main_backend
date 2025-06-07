@@ -5,9 +5,11 @@ const date_fns_1 = require("date-fns");
 module.exports = {
     getWorksprintsByDate: async (req, res) => {
         try {
-            const dateString = req.query.date;
-            console.log(dateString);
-            if (!(0, date_fns_1.isValid)(dateString)) {
+            const dateString = req.query.date
+                ? req.query.date
+                : '';
+            console.log(new Date(dateString));
+            if (!(0, date_fns_1.isValid)(new Date(dateString))) {
                 throw new Error('invalid date format');
             }
             const workSprints = await getWorksprintsForDate(dateString);
