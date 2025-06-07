@@ -11,7 +11,7 @@ const {
   WorkSprintCreationAttributes,
 } = require('../types/WorkSprint');
 
-async function getWorkSprintsForDate(date: string) {
+async function getWorksprintsForDate(date: string) {
   return require('../models/worksprint.model').WorkSprint.findAll({
     where: { sprintDate: date },
   });
@@ -28,6 +28,6 @@ async function createNewWorksprint(
 }
 
 module.exports = {
-  getWorkSprintsForDate,
+  getWorksprintsForDate,
   createNewWorksprint,
 };
