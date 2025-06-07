@@ -12,8 +12,6 @@ const {
 } = require('../types/WorkSprint');
 
 async function getWorksprintsForDate(date: string) {
-  console.log('Fetching worksprints for date:', date);
-
   return require('../models/worksprint.model').WorkSprint.findAll({
     where: { sprintDate: date },
   });

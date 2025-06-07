@@ -8,7 +8,6 @@ module.exports = {
             const dateString = req.query.date
                 ? req.query.date
                 : '';
-            // console.log(new Date(dateString));
             if (!(0, date_fns_1.isValid)(new Date(dateString))) {
                 throw new Error('invalid date format');
             }
@@ -30,6 +29,18 @@ module.exports = {
                 sprintStartTime,
                 sprintEndTime,
             };
+            if (!sprintDate || !sprintStartTime || !sprintEndTime) {
+                return res.status(400).json({
+                    message: 'Please provide all required fields',
+                });
+            }
+            const parsedStartDate = (0, date_fns_1.parse)(sprintStartTime, 'HH:mm', new Date());
+            const parsedEndDate = (0, date_fns_1.parse)(sprintEndTime, 'HH:mm', new Date());
+            if (!(0, date_fns_1.isValid)(new Date(sprintDate)) ||
+                !(0, date_fns_1.isValid)(parsedStartDate) ||
+                !(0, date_fns_1.isValid)(parsedEndDate)) {
+                throw new Error('Invalid date/time format');
+            }
             const workSprint = await createNewWorksprint(payload);
             return res.status(201).json({
                 message: 'Successfully created work sprint',

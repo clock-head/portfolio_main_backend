@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 // const { WorkSprint } = require('../models');
 const { WorkSprintPayload, WorkSprintCreationAttributes, } = require('../types/WorkSprint');
 async function getWorksprintsForDate(date) {
-    console.log('Fetching worksprints for date:', date);
     return require('../models/worksprint.model').WorkSprint.findAll({
         where: { sprintDate: date },
     });
