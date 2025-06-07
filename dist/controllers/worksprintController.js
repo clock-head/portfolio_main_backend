@@ -6,6 +6,7 @@ module.exports = {
     getWorksprintsByDate: async (req, res) => {
         try {
             const dateString = req.query.date;
+            console.log(dateString);
             if (!(0, date_fns_1.isValid)(dateString)) {
                 throw new Error('invalid date format');
             }
