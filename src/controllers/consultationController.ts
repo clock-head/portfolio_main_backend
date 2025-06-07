@@ -7,7 +7,6 @@ import {
 const {
   getConsultationByPk,
   getConfirmedConsultationsForDate,
-  getWorkSprintsForDate,
   getRecentConsultations,
   getActiveConsultation,
   getAttendedConsultations,
@@ -15,6 +14,11 @@ const {
   rescheduleConsultation,
   createNewConsultation,
 } = require('../repositories/consultation.repositories');
+
+const {
+  getWorksprintsForDate,
+  createNewWorksprint,
+} = require('../repositories/worksprints.repositories');
 
 const {
   verifyTwoCancelled,
@@ -440,7 +444,7 @@ module.exports = {
       const consults = await getConfirmedConsultationsForDate(date);
 
       // Fetch work sprints on that date
-      const sprints = await getWorkSprintsForDate(date);
+      const sprints = await getWorksprintsForDate(date);
 
       // Combine consult and sprint blocks into exclusion times
       // Final result: all time slots minus blocked ones

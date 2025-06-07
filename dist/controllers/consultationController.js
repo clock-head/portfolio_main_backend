@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_utils_1 = require("../utils/consultation.utils");
-const { getConsultationByPk, getConfirmedConsultationsForDate, getWorkSprintsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
+const { getConsultationByPk, getConfirmedConsultationsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
+const { getWorksprintsForDate, createNewWorksprint, } = require('../repositories/worksprints.repositories');
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
 const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
@@ -319,7 +320,7 @@ module.exports = {
             // Fetch confirmed consultations on that date
             const consults = await getConfirmedConsultationsForDate(date);
             // Fetch work sprints on that date
-            const sprints = await getWorkSprintsForDate(date);
+            const sprints = await getWorksprintsForDate(date);
             // Combine consult and sprint blocks into exclusion times
             // Final result: all time slots minus blocked ones
             const availableTimeSlots = (0, consultation_utils_1.generateAvailableTimeSlots)(consults, sprints);
