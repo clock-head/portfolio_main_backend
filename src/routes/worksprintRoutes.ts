@@ -14,3 +14,5 @@ router.post(
   requireOperatorAuth,
   worksprintController.createNewWorksprint
 );
+
+module.exports = router;
