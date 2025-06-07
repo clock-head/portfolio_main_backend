@@ -6,6 +6,7 @@ const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFo
 const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 const { isValidTimeZone } = require('../utils/time.utils');
+const date_fns_1 = require("date-fns");
 module.exports = {
     createConsultation: async (req, res) => {
         // typescript compiler is looking for a user object here
@@ -306,8 +307,14 @@ module.exports = {
         try {
             const { date } = req.query;
             const user = req.user;
+            const dateString = req.query.date
+                ? req.query.date
+                : '';
             if (!date) {
                 return res.status(400).json({ message: 'Date is required.' });
+            }
+            if (!(0, date_fns_1.isValid)(new Date(dateString))) {
+                throw new Error('invalid date format');
             }
             // Fetch confirmed consultations on that date
             const consults = await getConfirmedConsultationsForDate(date);

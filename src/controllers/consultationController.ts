@@ -30,6 +30,7 @@ import { IUser } from '../types/User';
 const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 const { isValidTimeZone } = require('../utils/time.utils');
+import { parse, isValid } from 'date-fns';
 
 import { Request, Response } from 'express';
 
@@ -423,8 +424,16 @@ module.exports = {
       const { date } = req.query;
       const user = req.user;
 
+      const dateString: string = req.query.date
+        ? (req.query.date as string)
+        : '';
+
       if (!date) {
         return res.status(400).json({ message: 'Date is required.' });
+      }
+
+      if (!isValid(new Date(dateString))) {
+        throw new Error('invalid date format');
       }
 
       // Fetch confirmed consultations on that date
