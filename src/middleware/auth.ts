@@ -64,8 +64,8 @@ export const requireOperatorAuth = async (
     }
 
     const user = session.user;
-    console.log(user);
-    console.log(user.isAdmin);
+    // console.log(user);
+    // console.log(user.isAdmin);
 
     if (!user || !user.isAdmin) {
       return res.status(403).json({ message: 'Operator access required.' });

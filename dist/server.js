@@ -17,6 +17,7 @@ const sessionStore = new SequelizeStore({
 // Routes
 const authRoutes = require('./routes/authRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
+const worksprintRoutes = require('./routes/worksprintRoutes');
 (async () => {
     try {
         await models_1.sequelize.authenticate();
@@ -37,6 +38,7 @@ const consultationRoutes = require('./routes/consultationRoutes');
         }));
         app.use('/api/auth', authRoutes);
         app.use('/api/consultation', consultationRoutes);
+        app.use('/api/worksprint', worksprintRoutes);
         const PORT = process.env.PORT || 4000;
         app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);

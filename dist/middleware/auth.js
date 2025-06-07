@@ -53,8 +53,8 @@ const requireOperatorAuth = async (req, res, next) => {
             return res.status(401).json({ message: 'Session expired or invalid.' });
         }
         const user = session.user;
-        console.log(user);
-        console.log(user.isAdmin);
+        // console.log(user);
+        // console.log(user.isAdmin);
         if (!user || !user.isAdmin) {
             return res.status(403).json({ message: 'Operator access required.' });
         }

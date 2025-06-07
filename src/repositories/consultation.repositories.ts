@@ -2,7 +2,7 @@ import { CreationAttributes } from 'sequelize';
 // import { Consultation } from '../models/consultation.model';
 
 const { Work_Sprint } = require('../models');
-const { Op, CreationAttributes } = require('sequelize');
+const { Op } = require('sequelize');
 import { Consultation } from '../models';
 import { ConsultationPayload } from '../types/Consultation';
 
@@ -29,24 +29,12 @@ async function getRecentConsultations(userId: number, limit = 2) {
   });
 }
 
-// // 🔍 Get user's recent attended consultations (for indecision check)
-// async function getRecentAttendedConsultations(userId: number, limit = 2) {
-//   const oneMonthAgo = new Date();
-//   oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
-
-//   return require('../models/consultation.model').Consultation.findAll({
-//     where: { user_id: userId, resolutionStatus: 'attended' },
-//     order: [['created_at', 'DESC']],
-//     limit,
-//   });
-// }
-
 // 📆 Get confirmed consultations for a given date
 async function getConfirmedConsultationsForDate(date: string) {
   return require('../models/consultation.model').Consultation.findAll({
     where: {
       selectedDate: date,
-      resolutionStatus: 'confirmed',
+      resolutionStatus: { [Op.in]: ['pending', 'confirmed'] },
     },
   });
 }

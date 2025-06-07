@@ -29,6 +29,7 @@ const {
 import { IUser } from '../types/User';
 const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
+const { isValidTimeZone } = require('../utils/time.utils');
 
 import { Request, Response } from 'express';
 
@@ -39,7 +40,10 @@ module.exports = {
       const { selectedDate, startTime, endTime, timeZone } = req.body;
       const user = req.user;
       const utcDate = new Date();
-      // const timeZone = 'Australia/Sydney';
+
+      if (!isValidTimeZone(timeZone)) {
+        throw new Error('invalid time zone');
+      }
 
       const localDate = toZonedTime(utcDate, timeZone);
       const localDateFormatted = format(localDate, 'yyyy-MM-dd HH:mm:ssXXX', {
@@ -373,11 +377,6 @@ module.exports = {
       const localDateFormatted = format(today, 'yyyy-MM-dd HH:mm:ssXXX', {
         timeZone,
       });
-
-      // console.log(req.query.time_zone);
-
-      // const today = new Date(Date.now());
-      console.log(localDateFormatted);
 
       const month = parseInt(req.query.month as string, 10); // current month passed in through frontend query params.
       const year = parseInt(req.query.year as string, 10); // current year passed in through frontend query params.

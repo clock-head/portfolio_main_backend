@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { Consultation } from '../models/consultation.model';
 const { Work_Sprint } = require('../models');
-const { Op, CreationAttributes } = require('sequelize');
+const { Op } = require('sequelize');
 const models_1 = require("../models");
 // Get recent consultations for a user
 async function getConsultationByPk(consultationId) {
@@ -23,22 +23,12 @@ async function getRecentConsultations(userId, limit = 2) {
         limit,
     });
 }
-// // 🔍 Get user's recent attended consultations (for indecision check)
-// async function getRecentAttendedConsultations(userId: number, limit = 2) {
-//   const oneMonthAgo = new Date();
-//   oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
-//   return require('../models/consultation.model').Consultation.findAll({
-//     where: { user_id: userId, resolutionStatus: 'attended' },
-//     order: [['created_at', 'DESC']],
-//     limit,
-//   });
-// }
 // 📆 Get confirmed consultations for a given date
 async function getConfirmedConsultationsForDate(date) {
     return require('../models/consultation.model').Consultation.findAll({
         where: {
             selectedDate: date,
-            resolutionStatus: 'confirmed',
+            resolutionStatus: { [Op.in]: ['pending', 'confirmed'] },
         },
     });
 }

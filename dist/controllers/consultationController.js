@@ -5,6 +5,7 @@ const { getConsultationByPk, getConfirmedConsultationsForDate, getWorkSprintsFor
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
 const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
+const { isValidTimeZone } = require('../utils/time.utils');
 module.exports = {
     createConsultation: async (req, res) => {
         // typescript compiler is looking for a user object here
@@ -12,7 +13,9 @@ module.exports = {
             const { selectedDate, startTime, endTime, timeZone } = req.body;
             const user = req.user;
             const utcDate = new Date();
-            // const timeZone = 'Australia/Sydney';
+            if (!isValidTimeZone(timeZone)) {
+                throw new Error('invalid time zone');
+            }
             const localDate = toZonedTime(utcDate, timeZone);
             const localDateFormatted = format(localDate, 'yyyy-MM-dd HH:mm:ssXXX', {
                 timeZone,
@@ -272,9 +275,6 @@ module.exports = {
             const localDateFormatted = format(today, 'yyyy-MM-dd HH:mm:ssXXX', {
                 timeZone,
             });
-            // console.log(req.query.time_zone);
-            // const today = new Date(Date.now());
-            console.log(localDateFormatted);
             const month = parseInt(req.query.month, 10); // current month passed in through frontend query params.
             const year = parseInt(req.query.year, 10); // current year passed in through frontend query params.
             const day = today.getMonth() === month - 1 ? today.getDate() : 1;

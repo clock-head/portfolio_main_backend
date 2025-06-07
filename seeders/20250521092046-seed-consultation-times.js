@@ -41,6 +41,8 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('consultations', null, {});
+    await queryInterface.bulkDelete('consultations', {
+      created_at: '2025-05-21 09:35:47.247+00',
+    });
   },
 };
