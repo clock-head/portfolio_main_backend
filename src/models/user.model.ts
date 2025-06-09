@@ -39,6 +39,23 @@ export class User extends Model<User, UserCreationAttributes> {
   @Column({ type: DataType.DATE, field: 'locked_until' })
   lockedUntil!: Date;
 
+  @Column({ type: DataType.BOOLEAN, field: 'email_verified' })
+  emailVerified!: boolean;
+
+  @Column({
+    type: DataType.STRING,
+    field: 'email_verfication_token',
+    allowNull: true,
+  })
+  emailVerificationToken!: string | null;
+
+  @Column({
+    type: DataType.DATE,
+    field: 'email_verfication_expires_at',
+    allowNull: true,
+  })
+  emailVerificationExpiresAt!: string | null;
+
   @CreatedAt
   @Column({ type: DataType.DATE, field: 'created_at' })
   createdAt!: Date;

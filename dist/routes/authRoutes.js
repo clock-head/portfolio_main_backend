@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const authController = require('../controllers/authController');
+const rateLimiter_1 = require("../middleware/rateLimiter");
 // Auth endpoints
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
+router.post('/signup', rateLimiter_1.authRateLimiter, authController.signup);
+router.post('/login', rateLimiter_1.authRateLimiter, authController.login);
 router.post('/logout', authController.logout);
 router.get('/me', authController.getCurrentUser);
+router.get('/verify-email', authController.verifyEmail);
 module.exports = router;

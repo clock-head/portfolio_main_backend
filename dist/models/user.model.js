@@ -46,6 +46,26 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "lockedUntil", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, field: 'email_verified' }),
+    __metadata("design:type", Boolean)
+], User.prototype, "emailVerified", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.STRING,
+        field: 'email_verfication_token',
+        allowNull: true,
+    }),
+    __metadata("design:type", Object)
+], User.prototype, "emailVerificationToken", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.DATE,
+        field: 'email_verfication_expires_at',
+        allowNull: true,
+    }),
+    __metadata("design:type", Object)
+], User.prototype, "emailVerificationExpiresAt", void 0);
+__decorate([
     sequelize_typescript_1.CreatedAt,
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, field: 'created_at' }),
     __metadata("design:type", Date)

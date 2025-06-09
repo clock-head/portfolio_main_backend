@@ -6,6 +6,8 @@ import { UserPayload, SignupBody } from '../types/User';
 import { CreationAttributes } from 'sequelize';
 import { Request, Response } from 'express';
 import { z } from 'zod';
+import { sendVerificationEmail } from '../utils/email';
+import { Op } from 'sequelize';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 
@@ -19,6 +21,9 @@ const signupSchema = z.object({
 module.exports = {
   signup: async (req: Request<{}, {}, SignupBody>, res: Response) => {
     const validation = signupSchema.safeParse(req.body);
+
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     if (!validation.success) {
       return res.status(400).json({ errors: validation.error.format() });
@@ -39,6 +44,9 @@ module.exports = {
         firstName: firstName,
         lastName: lastName,
         isAdmin: false,
+        emailVerified: false,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpiresAt: expiresAt,
       };
 
       const newUser = await User.create(payload);
@@ -56,6 +64,8 @@ module.exports = {
     try {
       const user = await User.findOne({ where: { email } });
       if (!user) return res.status(404).json({ message: 'User not found.' });
+      if (!user.emailVerified)
+        return res.status(403).json({ message: 'Email not verified.' });
 
       const match = await bcrypt.compare(password, user.passwordHash);
       if (!match)
@@ -121,6 +131,37 @@ module.exports = {
       }
 
       return res.status(200).json({ user });
+    } catch (err) {
+      return res.status(500).json({ error: 'Internal server error.' });
+    }
+  },
+
+  verifyEmail: async (req: Request, res: Response) => {
+    const { token } = req.query;
+    if (!token || typeof token !== 'string') {
+      return res.status(400).json({ message: 'Invalid or missing token.' });
+    }
+
+    try {
+      const user = await User.findOne({
+        where: {
+          emailVerificationToken: token,
+          emailVerificationExpiresAt: {
+            [Op.gt]: new Date(), // Check if the token is still valid
+          },
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'Invalid or expired token.' });
+      }
+
+      user.emailVerified = true;
+      user.emailVerificationToken = null;
+      user.emailVerificationExpiresAt = null;
+      await user.save();
+
+      return res.status(200).json({ message: 'Email verified successfully.' });
     } catch (err) {
       return res.status(500).json({ error: 'Internal server error.' });
     }

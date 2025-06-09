@@ -19,6 +19,9 @@ export interface UserCreationAttributes {
   firstName: string;
   lastName: string;
   isAdmin: boolean;
+  emailVerified?: boolean;
+  emailVerificationToken?: string | null;
+  emailVerificationExpiresAt?: Date | null;
 }
 
 export interface IUser {

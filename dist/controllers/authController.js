@@ -5,6 +5,7 @@ const crypto = require('crypto');
 // const { User, Session } = require('../models');
 const models_1 = require("../models");
 const zod_1 = require("zod");
+const sequelize_1 = require("sequelize");
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 const signupSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
@@ -15,6 +16,8 @@ const signupSchema = zod_1.z.object({
 module.exports = {
     signup: async (req, res) => {
         const validation = signupSchema.safeParse(req.body);
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
         if (!validation.success) {
             return res.status(400).json({ errors: validation.error.format() });
         }
@@ -30,6 +33,9 @@ module.exports = {
                 firstName: firstName,
                 lastName: lastName,
                 isAdmin: false,
+                emailVerified: false,
+                emailVerificationToken: verificationToken,
+                emailVerificationExpiresAt: expiresAt,
             };
             const newUser = await models_1.User.create(payload);
             return res.status(201).json({ message: 'User created successfully.' });
@@ -45,6 +51,8 @@ module.exports = {
             const user = await models_1.User.findOne({ where: { email } });
             if (!user)
                 return res.status(404).json({ message: 'User not found.' });
+            if (!user.emailVerified)
+                return res.status(403).json({ message: 'Email not verified.' });
             const match = await bcrypt.compare(password, user.passwordHash);
             if (!match)
                 return res.status(401).json({ message: 'Incorrect password.' });
@@ -96,6 +104,33 @@ module.exports = {
                 return res.status(404).json({ message: 'User not found.' });
             }
             return res.status(200).json({ user });
+        }
+        catch (err) {
+            return res.status(500).json({ error: 'Internal server error.' });
+        }
+    },
+    verifyEmail: async (req, res) => {
+        const { token } = req.query;
+        if (!token || typeof token !== 'string') {
+            return res.status(400).json({ message: 'Invalid or missing token.' });
+        }
+        try {
+            const user = await models_1.User.findOne({
+                where: {
+                    emailVerificationToken: token,
+                    emailVerificationExpiresAt: {
+                        [sequelize_1.Op.gt]: new Date(), // Check if the token is still valid
+                    },
+                },
+            });
+            if (!user) {
+                return res.status(404).json({ message: 'Invalid or expired token.' });
+            }
+            user.emailVerified = true;
+            user.emailVerificationToken = null;
+            user.emailVerificationExpiresAt = null;
+            await user.save();
+            return res.status(200).json({ message: 'Email verified successfully.' });
         }
         catch (err) {
             return res.status(500).json({ error: 'Internal server error.' });
