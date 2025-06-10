@@ -448,9 +448,9 @@ module.exports = {
 
       // Combine consult and sprint blocks into exclusion times
       // Final result: all time slots minus blocked ones
-      const availableTimeSlots = generateAvailableTimeSlots(consults, sprints);
+      const availableTimeslots = generateAvailableTimeSlots(consults, sprints);
 
-      return res.status(200).json({ date, availableTimeSlots });
+      return res.status(200).json({ date, availableTimeslots });
     } catch (err) {
       console.error('[getAvailableTimeSlots Error]', err);
       return res.status(500).json({ message: `Internal server error ${err}.` });

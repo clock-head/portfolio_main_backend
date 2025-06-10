@@ -323,8 +323,8 @@ module.exports = {
             const sprints = await getWorksprintsForDate(date);
             // Combine consult and sprint blocks into exclusion times
             // Final result: all time slots minus blocked ones
-            const availableTimeSlots = (0, consultation_utils_1.generateAvailableTimeSlots)(consults, sprints);
-            return res.status(200).json({ date, availableTimeSlots });
+            const availableTimeslots = (0, consultation_utils_1.generateAvailableTimeSlots)(consults, sprints);
+            return res.status(200).json({ date, availableTimeslots });
         }
         catch (err) {
             console.error('[getAvailableTimeSlots Error]', err);
