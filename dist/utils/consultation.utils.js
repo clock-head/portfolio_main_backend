@@ -20,7 +20,7 @@ function generateWorkingDays(startDate, daysInMonth, offsetDays) {
         const day = cursor.getDay(); // 0 = Sunday, 6 = Saturday
         if (day >= 1 && day <= 5) {
             // Monday to Friday only
-            dates.push(new Date(cursor));
+            dates.push(new Date(cursor).getDate());
         }
         cursor.setDate(cursor.getDate() + 1);
         count++;
