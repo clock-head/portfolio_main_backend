@@ -6,6 +6,7 @@ const generateHourlySlots = () => {
   const slots = [];
   for (let h = 10; h < 18; h++) {
     slots.push(`${h.toString().padStart(2, '0')}:00`);
+    slots.push(`${h.toString().padStart(2, '0')}:30`);
   }
   return slots;
 };
