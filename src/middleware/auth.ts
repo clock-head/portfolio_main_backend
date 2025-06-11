@@ -3,7 +3,11 @@ import { Session, User } from '../models';
 import { Request, Response, NextFunction } from 'express';
 
 // Middleware to protect routes
-const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const requireAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const rawToken = req.cookies?.session_token;
 
   if (!rawToken) {

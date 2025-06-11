@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 const consultationController = require('../controllers/consultationController');
-const { requireAuth, requireOperatorAuth } = require('../middleware/auth');
+import { requireAuth, requireOperatorAuth } from '../middleware/auth';
 
 // Booking Routes
 

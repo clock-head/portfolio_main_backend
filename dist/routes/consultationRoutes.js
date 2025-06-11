@@ -6,20 +6,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const consultationController = require('../controllers/consultationController');
-const { requireAuth, requireOperatorAuth } = require('../middleware/auth');
+const auth_1 = require("../middleware/auth");
 // Booking Routes
 // Get available dates for booking (public)
 router.get('/available-dates', consultationController.getAvailableDates);
 // Get available time slots for a specific date (public)
 router.get('/available-timeslots', consultationController.getAvailableTimeSlots);
 // Submit a new booking (guarded by auth middleware)
-router.post('/create', requireAuth, consultationController.createConsultation);
+router.post('/create', auth_1.requireAuth, consultationController.createConsultation);
 // Change Consultation status
-router.patch('/change-consultation-status/:consultationId', requireOperatorAuth, consultationController.changeConsultationStatus);
+router.patch('/change-consultation-status/:consultationId', auth_1.requireOperatorAuth, consultationController.changeConsultationStatus);
 // (Optional) Get current user's booking
-router.get('/my-consultation', requireAuth, consultationController.getUserConsultation);
+router.get('/my-consultation', auth_1.requireAuth, consultationController.getUserConsultation);
 // (Optional) Cancel a booking
-router.post('/cancel', requireAuth, consultationController.cancelConsultation);
+router.post('/cancel', auth_1.requireAuth, consultationController.cancelConsultation);
 // (Optional) Reschedule a booking
-router.post('/reschedule', requireAuth, consultationController.rescheduleConsultation);
+router.post('/reschedule', auth_1.requireAuth, consultationController.rescheduleConsultation);
 module.exports = router;

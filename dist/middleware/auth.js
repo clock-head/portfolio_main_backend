@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.requireOperatorAuth = void 0;
+exports.requireOperatorAuth = exports.requireAuth = void 0;
 const crypto = require('crypto');
 const models_1 = require("../models");
 // Middleware to protect routes
@@ -33,6 +33,7 @@ const requireAuth = async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
+exports.requireAuth = requireAuth;
 const requireOperatorAuth = async (req, res, next) => {
     const rawToken = req.cookies?.session_token;
     if (!rawToken) {
@@ -69,6 +70,6 @@ const requireOperatorAuth = async (req, res, next) => {
 };
 exports.requireOperatorAuth = requireOperatorAuth;
 module.exports = {
-    requireAuth,
+    requireAuth: exports.requireAuth,
     requireOperatorAuth: exports.requireOperatorAuth,
 };
