@@ -1,4 +1,12 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ValueDeterminingMiddleware } from 'express-rate-limit';
+import { Request, Response } from 'express';
+
+const keyGenerator: ValueDeterminingMiddleware<string> = (
+  req: Request,
+  res: Response
+): string => {
+  return req.ip ?? 'unknown'; // Use the IP address as the key
+};
 
 export const authRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -9,4 +17,5 @@ export const authRateLimiter = rateLimit({
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  keyGenerator,
 });
