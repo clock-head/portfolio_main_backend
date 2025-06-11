@@ -46,6 +46,7 @@ function generateAvailableTimeSlots(consults, sprints) {
         const endHour = parseInt(sprint.sprintEndTime.split(':')[0]);
         for (let h = startHour; h < endHour; h++) {
             blockedTimes.add(`${h.toString().padStart(2, '0')}:00`);
+            blockedTimes.add(`${h.toString().padStart(2, '0')}:30`);
         }
     });
     // Final result: all time slots minus blocked ones

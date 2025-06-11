@@ -60,6 +60,7 @@ function generateAvailableTimeSlots(
 
     for (let h = startHour; h < endHour; h++) {
       blockedTimes.add(`${h.toString().padStart(2, '0')}:00`);
+      blockedTimes.add(`${h.toString().padStart(2, '0')}:30`);
     }
   });
 
