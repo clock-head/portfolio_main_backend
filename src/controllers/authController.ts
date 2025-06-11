@@ -86,8 +86,11 @@ module.exports = {
       });
 
       return res.status(200).json({ message: 'Login successful.' });
-    } catch (err) {
-      return res.status(500).json({ error: 'Internal server error.' });
+    } catch (err: any) {
+      console.error('Login error:', err);
+      return res
+        .status(500)
+        .json({ error: err.message || 'Internal server error.' });
     }
   },
 
