@@ -51,7 +51,7 @@ export class User extends Model<User, UserCreationAttributes> {
 
   @Column({
     type: DataType.DATE,
-    field: 'email_verfication_expires_at',
+    field: 'email_verification_expires_at',
     allowNull: true,
   })
   emailVerificationExpiresAt!: Date | null;

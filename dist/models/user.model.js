@@ -60,7 +60,7 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.DATE,
-        field: 'email_verfication_expires_at',
+        field: 'email_verification_expires_at',
         allowNull: true,
     }),
     __metadata("design:type", Object)
