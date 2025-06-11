@@ -13,7 +13,7 @@ import {
 } from 'sequelize-typescript';
 import { UserCreationAttributes } from '../types/User';
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'users', underscored: true })
 export class User extends Model<User, UserCreationAttributes> {
   @PrimaryKey
   @AutoIncrement
@@ -44,7 +44,7 @@ export class User extends Model<User, UserCreationAttributes> {
 
   @Column({
     type: DataType.STRING,
-    field: 'email_verfication_token',
+    field: 'email_verification_token',
     allowNull: true,
   })
   emailVerificationToken!: string | null;
@@ -54,7 +54,7 @@ export class User extends Model<User, UserCreationAttributes> {
     field: 'email_verfication_expires_at',
     allowNull: true,
   })
-  emailVerificationExpiresAt!: string | null;
+  emailVerificationExpiresAt!: Date | null;
 
   @CreatedAt
   @Column({ type: DataType.DATE, field: 'created_at' })

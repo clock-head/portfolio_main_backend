@@ -52,7 +52,7 @@ __decorate([
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING,
-        field: 'email_verfication_token',
+        field: 'email_verification_token',
         allowNull: true,
     }),
     __metadata("design:type", Object)
@@ -97,5 +97,5 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "jobBookings", void 0);
 exports.User = User = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'users' })
+    (0, sequelize_typescript_1.Table)({ tableName: 'users', underscored: true })
 ], User);
