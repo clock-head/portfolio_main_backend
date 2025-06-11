@@ -10,7 +10,7 @@ import 'reflect-metadata';
 dotenv.config();
 
 const app = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', 'loopback');
 
 const sessionStore = new SequelizeStore({
   db: sequelize,

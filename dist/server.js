@@ -10,7 +10,7 @@ const cors = require('cors');
 require("reflect-metadata");
 dotenv.config();
 const app = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', 'loopback');
 const sessionStore = new SequelizeStore({
     db: models_1.sequelize,
     table: 'Session',
