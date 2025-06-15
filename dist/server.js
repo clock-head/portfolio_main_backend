@@ -27,7 +27,10 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
         app.use(express.urlencoded({ extended: true }));
         app.use(cookieParser());
         app.use(cors({
-            origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+            origin: process.env.FRONTEND_ORIGIN ||
+                process.env.FRONTEND_DOMAIN ||
+                process.env.FRONTEND_SUBDOMAIN ||
+                'http://localhost:5173',
             credentials: true,
         }));
         app.use(session({
