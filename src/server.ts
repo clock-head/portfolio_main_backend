@@ -34,8 +34,8 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
     app.use(
       cors({
         origin:
-          process.env.FRONTEND_ORIGIN ||
           process.env.FRONTEND_DOMAIN ||
+          process.env.FRONTEND_ORIGIN ||
           process.env.FRONTEND_SUBDOMAIN ||
           'http://localhost:5173',
         credentials: true,
