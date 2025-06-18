@@ -292,7 +292,7 @@ module.exports = {
                     offsetDays = 3; // Skip 3 calendar days
                 }
             }
-            const startDate = new Date(year, month - 1, day + 1); // returns a Date object
+            const startDate = new Date(year, month - 1, day); // returns a Date object
             console.log(startDate);
             startDate.setDate(startDate.getDate());
             //Dynamically determine how many days in the selected month
