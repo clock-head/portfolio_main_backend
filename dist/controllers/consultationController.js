@@ -308,9 +308,11 @@ module.exports = {
         try {
             const { date } = req.query;
             const user = req.user;
-            const dateString = date ? req.query.date : '';
+            const dateString = date ? date : '';
             const dateObj = new Date(dateString);
             if (Date.now() > dateObj.getMilliseconds()) {
+                console.log(Date.now());
+                console.log(dateObj.getMilliseconds());
                 return res.status(402).json({ message: 'date no longer available.' });
             }
             if (!date) {
