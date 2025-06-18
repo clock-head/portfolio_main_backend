@@ -292,11 +292,15 @@ module.exports = {
                     offsetDays = 3; // Skip 3 calendar days
                 }
             }
-            const startDate = new Date(year, month - 1, day); // returns a Date object
+            const startDate = today.getMonth() === month - 1
+                ? new Date(year, month - 1, day + 1)
+                : new Date(year, month - 1, day); // returns a Date object
             console.log('start date: ', startDate);
             startDate.setDate(startDate.getDate());
             //Dynamically determine how many days in the selected month
-            const daysInMonth = new Date(year, month, 0).getDate() - day; // does this get a number?
+            const daysInMonth = today.getMonth() === month - 1
+                ? new Date(year, month, 0).getDate() - day
+                : new Date(year, month, 0).getDate(); // does this get a number?
             const availableDates = (0, consultation_utils_1.generateWorkingDays)(startDate, daysInMonth, offsetDays);
             return res.status(200).json({ availableDates });
         }
