@@ -309,9 +309,9 @@ module.exports = {
             const { date } = req.query;
             const user = req.user;
             const dateString = date ? req.query.date : '';
-            if (Date.now() > new Date(dateString).getMilliseconds()) {
-                return res.status(402).json({ message: 'date no longer available.' });
-            }
+            // if (Date.now() > new Date(dateString).getMilliseconds()) {
+            //   return res.status(402).json({ message: 'date no longer available.' });
+            // }
             if (!date) {
                 return res.status(400).json({ message: 'Date is required.' });
             }
