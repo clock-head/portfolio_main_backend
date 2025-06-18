@@ -434,7 +434,7 @@ module.exports = {
       if (Date.now() > dateObj.getTime()) {
         console.log(Date.now());
         console.log(dateObj.getTime());
-        return res.status(402).json({ message: 'date no longer available.' });
+        return res.status(410).json({ message: 'date no longer available.' });
       }
 
       if (!date) {
