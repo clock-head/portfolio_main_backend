@@ -6,7 +6,10 @@ import { UserPayload, SignupBody } from '../types/User';
 import { CreationAttributes } from 'sequelize';
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { sendVerificationEmail } from '../utils/email';
+import {
+  sendVerificationEmail,
+  generateVerificationToken,
+} from '../services/emailService';
 import { Op } from 'sequelize';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
@@ -168,5 +171,19 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({ error: 'Internal server error.' });
     }
+  },
+
+  sendVerificationEmail: async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    const token = await generateVerificationToken(email); // You define this
+
+    if (token.length === 0) {
+      res.status(404).json({ message: 'user not found.' });
+    }
+
+    await sendVerificationEmail(email, token);
+
+    res.status(200).json({ message: 'Verification email sent.' });
   },
 };

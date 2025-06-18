@@ -14,4 +14,5 @@ router.post('/login', rateLimiter_1.authRateLimiter, authController.login);
 router.post('/logout', auth_1.requireAuth, authController.logout);
 router.get('/me', authController.getCurrentUser);
 router.get('/verify-email', authController.verifyEmail);
+router.post('/send-verification', authController.sendVerificationEmail);
 module.exports = router;

@@ -5,6 +5,7 @@ const crypto = require('crypto');
 // const { User, Session } = require('../models');
 const models_1 = require("../models");
 const zod_1 = require("zod");
+const emailService_1 = require("../services/emailService");
 const sequelize_1 = require("sequelize");
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
 const signupSchema = zod_1.z.object({
@@ -138,5 +139,14 @@ module.exports = {
         catch (err) {
             return res.status(500).json({ error: 'Internal server error.' });
         }
+    },
+    sendVerificationEmail: async (req, res) => {
+        const { email } = req.body;
+        const token = await (0, emailService_1.generateVerificationToken)(email); // You define this
+        if (token.length === 0) {
+            res.status(404).json({ message: 'user not found.' });
+        }
+        await (0, emailService_1.sendVerificationEmail)(email, token);
+        res.status(200).json({ message: 'Verification email sent.' });
     },
 };
