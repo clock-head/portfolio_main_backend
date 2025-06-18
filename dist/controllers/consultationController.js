@@ -293,6 +293,7 @@ module.exports = {
                 }
             }
             const startDate = new Date(year, month - 1, day + 1); // returns a Date object
+            console.log(startDate);
             startDate.setDate(startDate.getDate());
             //Dynamically determine how many days in the selected month
             const daysInMonth = new Date(year, month, 0).getDate() - day; // does this get a number?
