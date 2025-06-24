@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const models_1 = require("../models");
 const SibApiV3Sdk = require('@sendinblue/client');
 const brevoClient = new SibApiV3Sdk.TransactionalEmailsApi();
-brevoClient.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKeys, process.env.BREVO_API_KEY);
+brevoClient.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 async function sendEmail({ to, subject, htmlContent, senderName = 'Operator', senderEmail = 'operator@clockhead.dev', }) {
     try {
         const response = await brevoClient.sendTransacEmail({
