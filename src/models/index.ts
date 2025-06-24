@@ -4,6 +4,7 @@ import { Session } from './session.model';
 import { Consultation } from './consultation.model';
 import { JobBooking } from './job_booking.model';
 import { WorkSprint } from './worksprint.model';
+import { VerificationAttempt } from './verificationattempt.model';
 
 require('dotenv').config();
 
@@ -34,4 +35,12 @@ const sequelize = new Sequelize({
   models: [User, Session, Consultation, JobBooking, WorkSprint], // Add all models here
 });
 
-export { sequelize, User, Session, Consultation, JobBooking, WorkSprint };
+export {
+  sequelize,
+  User,
+  Session,
+  Consultation,
+  JobBooking,
+  WorkSprint,
+  VerificationAttempt,
+};

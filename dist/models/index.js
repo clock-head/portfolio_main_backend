@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkSprint = exports.JobBooking = exports.Consultation = exports.Session = exports.User = exports.sequelize = void 0;
+exports.VerificationAttempt = exports.WorkSprint = exports.JobBooking = exports.Consultation = exports.Session = exports.User = exports.sequelize = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const user_model_1 = require("./user.model");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_model_1.User; } });
@@ -12,6 +12,8 @@ const job_booking_model_1 = require("./job_booking.model");
 Object.defineProperty(exports, "JobBooking", { enumerable: true, get: function () { return job_booking_model_1.JobBooking; } });
 const worksprint_model_1 = require("./worksprint.model");
 Object.defineProperty(exports, "WorkSprint", { enumerable: true, get: function () { return worksprint_model_1.WorkSprint; } });
+const verificationattempt_model_1 = require("./verificationattempt.model");
+Object.defineProperty(exports, "VerificationAttempt", { enumerable: true, get: function () { return verificationattempt_model_1.VerificationAttempt; } });
 require('dotenv').config();
 const sequelize = new sequelize_typescript_1.Sequelize({
     dialect: 'postgres',
