@@ -37,7 +37,7 @@ export class User extends Model<User, UserCreationAttributes> {
   isAdmin!: boolean;
 
   @Column({ type: DataType.DATE, field: 'locked_until' })
-  lockedUntil!: Date;
+  lockedUntil!: Date | null;
 
   @Column({ type: DataType.BOOLEAN, field: 'email_verified' })
   emailVerified!: boolean;
@@ -55,6 +55,26 @@ export class User extends Model<User, UserCreationAttributes> {
     allowNull: true,
   })
   emailVerificationExpiresAt!: Date | null;
+
+  @Column({
+    type: DataType.INTEGER,
+    field: 'verification_attempts',
+  })
+  verificationAttempts!: number;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    field: 'compromised',
+    defaultValue: false,
+  })
+  compromised!: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    field: 'in_violation',
+    defaultValue: false,
+  })
+  inViolation!: boolean;
 
   @CreatedAt
   @Column({ type: DataType.DATE, field: 'created_at' })

@@ -5,14 +5,19 @@ import { User, Session } from '../models';
 import { UserPayload, SignupBody } from '../types/User';
 import { CreationAttributes } from 'sequelize';
 import { Request, Response } from 'express';
+import { addMinutes, isAfter } from 'date-fns';
 import { z } from 'zod';
 import {
   sendVerificationEmail,
   generateVerificationToken,
 } from '../services/emailService';
+import { VerificationAttempt } from '../models/verificationattempt.model';
 import { Op } from 'sequelize';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 1 day in ms
+
+const MAX_INVALID_ATTEMPTS = 5;
+const LOCK_DURATION_MINUTES = 15;
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -137,37 +142,6 @@ module.exports = {
       }
 
       return res.status(200).json({ user });
-    } catch (err) {
-      return res.status(500).json({ error: 'Internal server error.' });
-    }
-  },
-
-  verifyEmail: async (req: Request, res: Response) => {
-    const { token } = req.query;
-    if (!token || typeof token !== 'string') {
-      return res.status(400).json({ message: 'Invalid or missing token.' });
-    }
-
-    try {
-      const user = await User.findOne({
-        where: {
-          emailVerificationToken: token,
-          emailVerificationExpiresAt: {
-            [Op.gt]: new Date(), // Check if the token is still valid
-          },
-        },
-      });
-
-      if (!user) {
-        return res.status(404).json({ message: 'Invalid or expired token.' });
-      }
-
-      user.emailVerified = true;
-      user.emailVerificationToken = null;
-      user.emailVerificationExpiresAt = null;
-      await user.save();
-
-      return res.status(200).json({ message: 'Email verified successfully.' });
     } catch (err) {
       return res.status(500).json({ error: 'Internal server error.' });
     }

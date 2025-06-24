@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express = require('express');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -9,8 +10,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require("reflect-metadata");
 dotenv.config();
-const app = express();
-app.set('trust proxy', 'loopback');
+exports.app = express();
+exports.app.set('trust proxy', 'loopback');
 const sessionStore = new SequelizeStore({
     db: models_1.sequelize,
     table: 'Session',
@@ -23,28 +24,28 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
     try {
         await models_1.sequelize.authenticate();
         await models_1.sequelize.sync();
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: true }));
-        app.use(cookieParser());
-        app.use(cors({
+        exports.app.use(express.json());
+        exports.app.use(express.urlencoded({ extended: true }));
+        exports.app.use(cookieParser());
+        exports.app.use(cors({
             origin: process.env.FRONTEND_DOMAIN ||
                 process.env.FRONTEND_ORIGIN ||
                 process.env.FRONTEND_SUBDOMAIN ||
                 'http://localhost:5173',
             credentials: true,
         }));
-        app.use(session({
+        exports.app.use(session({
             secret: process.env.SESSION_SECRET,
             store: sessionStore,
             resave: false,
             saveUninitialized: false,
             cookie: { secure: false, httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }, // 1 day
         }));
-        app.use('/api/auth', authRoutes);
-        app.use('/api/consultation', consultationRoutes);
-        app.use('/api/worksprint', worksprintRoutes);
+        exports.app.use('/api/auth', authRoutes);
+        exports.app.use('/api/consultation', consultationRoutes);
+        exports.app.use('/api/worksprint', worksprintRoutes);
         const PORT = process.env.PORT || 4000;
-        app.listen(PORT, () => {
+        exports.app.listen(PORT, () => {
             console.log(`Server running at http://localhost:${PORT}`);
         });
     }

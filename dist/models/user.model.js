@@ -43,7 +43,7 @@ __decorate([
 ], User.prototype, "isAdmin", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, field: 'locked_until' }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], User.prototype, "lockedUntil", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.BOOLEAN, field: 'email_verified' }),
@@ -65,6 +65,29 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], User.prototype, "emailVerificationExpiresAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.INTEGER,
+        field: 'verification_attempts',
+    }),
+    __metadata("design:type", Number)
+], User.prototype, "verificationAttempts", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.BOOLEAN,
+        field: 'compromised',
+        defaultValue: false,
+    }),
+    __metadata("design:type", Boolean)
+], User.prototype, "compromised", void 0);
+__decorate([
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.BOOLEAN,
+        field: 'in_violation',
+        defaultValue: false,
+    }),
+    __metadata("design:type", Boolean)
+], User.prototype, "inViolation", void 0);
 __decorate([
     sequelize_typescript_1.CreatedAt,
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.DATE, field: 'created_at' }),

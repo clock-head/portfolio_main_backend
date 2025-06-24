@@ -8,11 +8,12 @@ const router = express_1.default.Router();
 const authController = require('../controllers/authController');
 const auth_1 = require("../middleware/auth");
 const rateLimiter_1 = require("../middleware/rateLimiter");
+const verifyEmailController_1 = require("../controllers/verifyEmailController");
 // Auth endpoints
 router.post('/signup', rateLimiter_1.authRateLimiter, authController.signup);
 router.post('/login', rateLimiter_1.authRateLimiter, authController.login);
 router.post('/logout', auth_1.requireAuth, authController.logout);
 router.get('/me', authController.getCurrentUser);
-router.get('/verify-email', authController.verifyEmail);
-router.post('/send-verification', authController.sendVerificationEmail);
+router.patch('/verify-email', verifyEmailController_1.verifyEmail);
+router.post('/send-verification-email', authController.sendVerificationEmail);
 module.exports = router;
