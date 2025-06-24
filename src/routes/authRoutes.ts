@@ -1,14 +1,9 @@
 import express from 'express';
-import { Request, Response } from 'express';
 const router = express.Router();
 const authController = require('../controllers/authController');
 import { requireAuth, requireOperatorAuth } from '../middleware/auth';
 import { authRateLimiter } from '../middleware/rateLimiter';
 import { verifyEmail } from '../controllers/verifyEmailController';
-import {
-  sendVerificationEmail,
-  generateVerificationToken,
-} from '../services/emailService';
 
 // Auth endpoints
 router.post('/signup', authRateLimiter, authController.signup);
