@@ -38,6 +38,13 @@ const sequelize = new sequelize_typescript_1.Sequelize({
             idle: 10000,
         },
     },
-    models: [user_model_1.User, session_model_1.Session, consultation_model_1.Consultation, job_booking_model_1.JobBooking, worksprint_model_1.WorkSprint], // Add all models here
+    models: [
+        user_model_1.User,
+        session_model_1.Session,
+        consultation_model_1.Consultation,
+        job_booking_model_1.JobBooking,
+        worksprint_model_1.WorkSprint,
+        verificationattempt_model_1.VerificationAttempt,
+    ], // Add all models here
 });
 exports.sequelize = sequelize;

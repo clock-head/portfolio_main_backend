@@ -32,7 +32,14 @@ const sequelize = new Sequelize({
       idle: 10000,
     },
   },
-  models: [User, Session, Consultation, JobBooking, WorkSprint], // Add all models here
+  models: [
+    User,
+    Session,
+    Consultation,
+    JobBooking,
+    WorkSprint,
+    VerificationAttempt,
+  ], // Add all models here
 });
 
 export {
