@@ -30,7 +30,7 @@ const verifyEmail = async (req, res) => {
     }
     catch (error) {
         console.error('[verifyEmail] Error:', error);
-        return res.status(500).json({ error: 'Internal server error.' });
+        return res.status(500).json({ error: `Internal server error. ${error}` });
     }
 };
 exports.verifyEmail = verifyEmail;
