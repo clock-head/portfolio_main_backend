@@ -65,7 +65,7 @@ module.exports = {
             res.cookie('session_token', token, {
                 httpOnly: true,
                 maxAge: SESSION_DURATION,
-                sameSite: 'strict',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
                 secure: process.env.NODE_ENV === 'production',
             });
             return res.status(200).json({ message: 'Login successful.', user: user });
