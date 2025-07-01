@@ -134,13 +134,7 @@ module.exports = {
       }
 
       const user = await User.findByPk(session.user_id, {
-        attributes: [
-          'user_id',
-          'email',
-          'createdAt',
-          'first_name',
-          'last_name',
-        ],
+        attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
       });
 
       if (!user) {

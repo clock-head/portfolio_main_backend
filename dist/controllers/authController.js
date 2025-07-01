@@ -103,13 +103,7 @@ module.exports = {
                 return res.status(401).json({ message: 'Session expired or invalid.' });
             }
             const user = await models_1.User.findByPk(session.user_id, {
-                attributes: [
-                    'user_id',
-                    'email',
-                    'createdAt',
-                    'first_name',
-                    'last_name',
-                ],
+                attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
             });
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
