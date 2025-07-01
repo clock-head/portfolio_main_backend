@@ -134,10 +134,14 @@ module.exports = {
       }
 
       const user = await User.findByPk(session.user_id, {
-        attributes: ['user_id', 'email', 'createdAt'],
+        attributes: [
+          'user_id',
+          'email',
+          'createdAt',
+          'first_name',
+          'last_name',
+        ],
       });
-
-      console.log(user);
 
       if (!user) {
         return res.status(404).json({ message: 'User not found.' });
