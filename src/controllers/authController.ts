@@ -134,7 +134,7 @@ module.exports = {
       }
 
       const user = await User.findByPk(session.user_id, {
-        attributes: ['user_id', 'email', 'username', 'createdAt'],
+        attributes: ['user_id', 'email', 'createdAt'],
       });
 
       if (!user) {
@@ -143,7 +143,7 @@ module.exports = {
 
       return res.status(200).json({ user });
     } catch (err) {
-      return res.status(500).json({ error: `Internal server error ${err}.` });
+      return res.status(500).json({ message: `Internal server error ${err}.` });
     }
   },
 

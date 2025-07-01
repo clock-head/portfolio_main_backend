@@ -103,7 +103,7 @@ module.exports = {
                 return res.status(401).json({ message: 'Session expired or invalid.' });
             }
             const user = await models_1.User.findByPk(session.user_id, {
-                attributes: ['user_id', 'email', 'username', 'createdAt'],
+                attributes: ['user_id', 'email', 'createdAt'],
             });
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
@@ -111,7 +111,7 @@ module.exports = {
             return res.status(200).json({ user });
         }
         catch (err) {
-            return res.status(500).json({ error: `Internal server error ${err}.` });
+            return res.status(500).json({ message: `Internal server error ${err}.` });
         }
     },
     sendVerificationEmail: async (req, res) => {
