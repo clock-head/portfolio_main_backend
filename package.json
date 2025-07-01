@@ -30,8 +30,7 @@
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.7",
     "sequelize-typescript": "^2.1.6",
-    "zod": "^3.25.23",
-    "athena-core": "*"
+    "zod": "^3.25.23"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
