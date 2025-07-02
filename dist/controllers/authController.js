@@ -40,6 +40,20 @@ module.exports = {
                 emailVerificationExpiresAt: expiresAt,
             };
             const newUser = await models_1.User.create(payload);
+            const token = crypto.randomBytes(64).toString('hex');
+            const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+            const sessionExpiresAt = new Date(Date.now() + SESSION_DURATION);
+            await models_1.Session.create({
+                user_id: newUser.user_id,
+                tokenHash,
+                expiresAt: sessionExpiresAt,
+            });
+            res.cookie('session_token', token, {
+                httpOnly: true,
+                maxAge: SESSION_DURATION,
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+                secure: process.env.NODE_ENV === 'production',
+            });
             return res.status(201).json({ message: 'User created successfully.' });
         }
         catch (err) {
@@ -86,6 +100,7 @@ module.exports = {
             .update(rawToken)
             .digest('hex');
         await models_1.Session.destroy({ where: { tokenHash } });
+        console.log(tokenHash);
         res.clearCookie('session_token');
         return res.status(200).json({ message: 'Logged out successfully.' });
     },

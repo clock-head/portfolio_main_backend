@@ -16,8 +16,24 @@ module.exports = {
         // typescript compiler is looking for a user object here
         try {
             const { selectedDate, startTime, endTime, timeZone } = req.body;
-            const user = req.user;
             const utcDate = new Date();
+            const rawToken = req.cookies?.session_token;
+            if (!rawToken)
+                return res.status(401).json({ message: 'No session token found.' });
+            const tokenHash = crypto
+                .createHash('sha256')
+                .update(rawToken)
+                .digest('hex');
+            const session = await models_1.Session.findOne({ where: { tokenHash } });
+            if (!session || new Date() > session.expiresAt) {
+                return res.status(401).json({ message: 'Session expired or invalid.' });
+            }
+            const user = await models_1.User.findByPk(session.user_id, {
+                attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
+            });
+            if (!user) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
             if (!isValidTimeZone(timeZone)) {
                 throw new Error('invalid time zone');
             }
@@ -26,14 +42,14 @@ module.exports = {
                 timeZone,
             });
             // 1. Guard: Lockout Check
-            if (user?.lockedUntil && new Date(user?.lockedUntil) > localDate) {
+            if (user.lockedUntil && new Date(user.lockedUntil) > localDate) {
                 // console.log(localDate);
                 return res.status(403).json({
                     message: 'You are currently locked out from making an appointment due to cancellations or repeated irresolution.',
                 });
             }
             // 2. Guard: Active Booking Check
-            const activeConsultation = await getActiveConsultation(user?.user_id);
+            const activeConsultation = await getActiveConsultation(user.user_id);
             if (activeConsultation) {
                 return res.status(409).json({
                     message: 'You already have an active consultation booking.',
@@ -49,7 +65,7 @@ module.exports = {
                 });
             }
             // 3. Guard: Consecutive Cancellation Lockout
-            const recentConsultations = await getRecentConsultations(user?.user_id, 4);
+            const recentConsultations = await getRecentConsultations(user.user_id, 4);
             // if there are no recent consultations, skip the checks
             if (recentConsultations) {
                 const [first, second, third, fourth] = recentConsultations;
@@ -137,7 +153,7 @@ module.exports = {
                 }
             }
             const consultation = {
-                userId: user?.user_id,
+                userId: user.user_id,
                 selectedDate: selectedDate,
                 startTime: startTime,
                 endTime: endTime,
