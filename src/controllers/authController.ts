@@ -77,7 +77,9 @@ module.exports = {
         secure: process.env.NODE_ENV === 'production',
       });
 
-      return res.status(201).json({ message: 'User created successfully.' });
+      return res
+        .status(201)
+        .json({ message: 'User created successfully.', user: newUser });
     } catch (err) {
       console.log(User);
       return res.status(500).json({ error: `Internal server error: ${err}` });

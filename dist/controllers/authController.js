@@ -54,7 +54,9 @@ module.exports = {
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
                 secure: process.env.NODE_ENV === 'production',
             });
-            return res.status(201).json({ message: 'User created successfully.' });
+            return res
+                .status(201)
+                .json({ message: 'User created successfully.', user: newUser });
         }
         catch (err) {
             console.log(models_1.User);
