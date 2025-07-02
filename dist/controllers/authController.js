@@ -133,6 +133,7 @@ module.exports = {
     },
     sendVerificationEmail: async (req, res) => {
         const { email } = req.body;
+        console.log(email);
         const token = await (0, emailService_1.generateVerificationToken)(email); // You define this
         if (token.length === 0) {
             res.status(404).json({ message: 'user not found.' });

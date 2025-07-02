@@ -171,6 +171,8 @@ module.exports = {
   sendVerificationEmail: async (req: Request, res: Response) => {
     const { email } = req.body;
 
+    console.log(email);
+
     const token = await generateVerificationToken(email); // You define this
 
     if (token.length === 0) {
