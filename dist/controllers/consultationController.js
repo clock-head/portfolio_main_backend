@@ -8,6 +8,9 @@ const { toZonedTime, format } = require('date-fns-tz');
 const { Op } = require('sequelize');
 const { isValidTimeZone } = require('../utils/time.utils');
 const date_fns_1 = require("date-fns");
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const models_1 = require("../models");
 module.exports = {
     createConsultation: async (req, res) => {
         // typescript compiler is looking for a user object here
@@ -188,7 +191,24 @@ module.exports = {
     },
     getUserConsultation: async (req, res) => {
         try {
-            const consultation = await getUserConsultation(req.user?.user_id);
+            const rawToken = req.cookies?.session_token;
+            if (!rawToken)
+                return res.status(401).json({ message: 'No session token found.' });
+            const tokenHash = crypto
+                .createHash('sha256')
+                .update(rawToken)
+                .digest('hex');
+            const session = await models_1.Session.findOne({ where: { tokenHash } });
+            if (!session || new Date() > session.expiresAt) {
+                return res.status(401).json({ message: 'Session expired or invalid.' });
+            }
+            const user = await models_1.User.findByPk(session.user_id, {
+                attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
+            });
+            if (!user) {
+                return res.status(404).json({ message: 'User not found.' });
+            }
+            const consultation = await getUserConsultation(user.user_id);
             if (!consultation) {
                 return res.status(404).json({ message: 'No active booking found.' });
             }

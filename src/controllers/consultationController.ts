@@ -36,6 +36,11 @@ const { Op } = require('sequelize');
 const { isValidTimeZone } = require('../utils/time.utils');
 import { parse, isValid } from 'date-fns';
 
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+
+import { User, Session } from '../models';
+
 import { Request, Response } from 'express';
 
 module.exports = {
@@ -268,7 +273,29 @@ module.exports = {
 
   getUserConsultation: async (req: Request, res: Response) => {
     try {
-      const consultation = await getUserConsultation(req.user?.user_id);
+      const rawToken = req.cookies?.session_token;
+      if (!rawToken)
+        return res.status(401).json({ message: 'No session token found.' });
+
+      const tokenHash = crypto
+        .createHash('sha256')
+        .update(rawToken)
+        .digest('hex');
+
+      const session = await Session.findOne({ where: { tokenHash } });
+      if (!session || new Date() > session.expiresAt) {
+        return res.status(401).json({ message: 'Session expired or invalid.' });
+      }
+
+      const user = await User.findByPk(session.user_id, {
+        attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+
+      const consultation = await getUserConsultation(user.user_id);
 
       if (!consultation) {
         return res.status(404).json({ message: 'No active booking found.' });
