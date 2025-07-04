@@ -17,7 +17,7 @@ router.post('/create', auth_1.requireAuth, consultationController.createConsulta
 // Change Consultation status
 router.patch('/change-consultation-status/:consultationId', auth_1.requireOperatorAuth, consultationController.changeConsultationStatus);
 // (Optional) Get current user's booking
-router.get('/my-consultation', auth_1.requireAuth, consultationController.getUserConsultation);
+router.get('/my-active-consultation', auth_1.requireAuth, consultationController.getActiveConsultation);
 // (Optional) Cancel a booking
 router.post('/cancel', auth_1.requireAuth, consultationController.cancelConsultation);
 // (Optional) Reschedule a booking

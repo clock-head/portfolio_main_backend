@@ -132,7 +132,6 @@ module.exports = {
       .update(rawToken)
       .digest('hex');
     await Session.destroy({ where: { tokenHash } });
-    console.log(tokenHash);
 
     res.clearCookie('session_token');
     return res.status(200).json({ message: 'Logged out successfully.' });

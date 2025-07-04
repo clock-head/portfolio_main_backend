@@ -70,8 +70,8 @@ async function getAttendedConsultations(
   });
 }
 
-async function getUserConsultation(userId: number) {
-  return require('../models/consultation.model').Consultation.findOne({
+async function getUserConsultations(userId: number) {
+  return require('../models/consultation.model').Consultation.findAll({
     where: {
       user_id: userId,
       resolutionStatus: {
@@ -111,7 +111,7 @@ module.exports = {
   getConfirmedConsultationsForDate,
   getActiveConsultation,
   getAttendedConsultations,
-  getUserConsultation,
+  getUserConsultations,
   rescheduleConsultation,
   createNewConsultation,
 };

@@ -26,9 +26,9 @@ router.patch(
 
 // (Optional) Get current user's booking
 router.get(
-  '/my-consultation',
+  '/my-active-consultation',
   requireAuth,
-  consultationController.getUserConsultation
+  consultationController.getActiveConsultation
 );
 
 // (Optional) Cancel a booking

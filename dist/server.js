@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express = require('express');
@@ -8,7 +11,9 @@ const dotenv = require('dotenv');
 const models_1 = require("./models");
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const body_parser_1 = __importDefault(require("body-parser"));
 require("reflect-metadata");
+const stripeWebhook_route_1 = __importDefault(require("./routes/stripeWebhook.route"));
 dotenv.config();
 exports.app = express();
 exports.app.set('trust proxy', 'loopback');
@@ -24,6 +29,7 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
     try {
         await models_1.sequelize.authenticate();
         await models_1.sequelize.sync();
+        exports.app.use('/api/stripe/webhook', body_parser_1.default.raw({ type: 'application/json' }), stripeWebhook_route_1.default);
         exports.app.use(express.json());
         exports.app.use(express.urlencoded({ extended: true }));
         exports.app.use(cookieParser());

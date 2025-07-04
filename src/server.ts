@@ -5,7 +5,10 @@ const dotenv = require('dotenv');
 import { sequelize } from './models';
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+import bodyParser from 'body-parser';
 import 'reflect-metadata';
+
+import stripeWebhookRouter from './routes/stripeWebhook.route';
 
 dotenv.config();
 
@@ -27,6 +30,12 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
     await sequelize.authenticate();
 
     await sequelize.sync();
+
+    app.use(
+      '/api/stripe/webhook',
+      bodyParser.raw({ type: 'application/json' }),
+      stripeWebhookRouter
+    );
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));

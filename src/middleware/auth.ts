@@ -1,11 +1,12 @@
 const crypto = require('crypto');
 import { Session, User } from '../models';
 import { Request, Response, NextFunction } from 'express';
+import { CustomRequest, CustomResponse } from 'src/types/User';
 
 // Middleware to protect routes
 export const requireAuth = async (
-  req: Request,
-  res: Response,
+  req: CustomRequest,
+  res: CustomResponse,
   next: NextFunction
 ) => {
   const rawToken = req.cookies?.session_token;
@@ -41,8 +42,8 @@ export const requireAuth = async (
 };
 
 export const requireOperatorAuth = async (
-  req: Request,
-  res: Response,
+  req: CustomRequest,
+  res: CustomResponse,
   next: NextFunction
 ) => {
   const rawToken = req.cookies?.session_token;

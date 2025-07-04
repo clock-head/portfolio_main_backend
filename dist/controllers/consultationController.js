@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const consultation_utils_1 = require("../utils/consultation.utils");
-const { getConsultationByPk, getConfirmedConsultationsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultation, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
+const { getUserSession, getUser } = require('../services/authService');
+const { getConsultationByPk, getConfirmedConsultationsForDate, getRecentConsultations, getActiveConsultation, getAttendedConsultations, getUserConsultations, rescheduleConsultation, createNewConsultation, } = require('../repositories/consultation.repositories');
 const { getWorksprintsForDate, createNewWorksprint, } = require('../repositories/worksprints.repositories');
 const { verifyTwoCancelled, verifyTwoUnresolved, verifyThreeUnresolved, verifyFourUnresolved, verifyFourCancelled, cancelActiveConsultation, lockUserOut, } = require('../services/consultationService');
 const { toZonedTime, format } = require('date-fns-tz');
@@ -17,25 +18,31 @@ module.exports = {
         try {
             const { selectedDate, startTime, endTime, timeZone } = req.body;
             const utcDate = new Date();
-            const rawToken = req.cookies?.session_token;
-            if (!rawToken)
-                return res.status(401).json({ message: 'No session token found.' });
-            const tokenHash = crypto
-                .createHash('sha256')
-                .update(rawToken)
-                .digest('hex');
-            const session = await models_1.Session.findOne({ where: { tokenHash } });
-            if (!session || new Date() > session.expiresAt) {
-                return res.status(401).json({ message: 'Session expired or invalid.' });
-            }
-            const user = await models_1.User.findByPk(session.user_id, {
-                attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
-            });
+            // should be provided by auth middleware.
+            const user = req.user;
+            // const rawToken = req.cookies?.session_token;
+            // if (!rawToken)
+            //   return res.status(401).json({ message: 'No session token found.' });
+            // const tokenHash = crypto
+            //   .createHash('sha256')
+            //   .update(rawToken)
+            //   .digest('hex');
+            // const session = await Session.findOne({ where: { tokenHash } });
+            // if (!session || new Date() > session.expiresAt) {
+            //   return res.status(401).json({ message: 'Session expired or invalid.' });
+            // }
+            // const user = await User.findByPk(session.user_id, {
+            //   attributes: ['user_id', 'email', 'createdAt', 'firstName', 'lastName'],
+            // });
             if (!user) {
-                return res.status(404).json({ message: 'User not found.' });
+                return res.status(404).json({
+                    message: 'User not found. [leak-detected]: Request bypassed middleware level containment.',
+                });
             }
             if (!isValidTimeZone(timeZone)) {
-                throw new Error('invalid time zone');
+                return res.status(409).json({
+                    message: 'invalid time zone. [leak-detected]: time-zone seal is a frontend level containment.',
+                });
             }
             const localDate = toZonedTime(utcDate, timeZone);
             const localDateFormatted = format(localDate, 'yyyy-MM-dd HH:mm:ssXXX', {
@@ -205,7 +212,7 @@ module.exports = {
             return res.status(500).json({ message: 'Internal server error.' });
         }
     },
-    getUserConsultation: async (req, res) => {
+    getActiveConsultation: async (req, res) => {
         try {
             const rawToken = req.cookies?.session_token;
             if (!rawToken)
@@ -224,7 +231,7 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: 'User not found.' });
             }
-            const consultation = await getUserConsultation(user.user_id);
+            const consultation = await getActiveConsultation(user.user_id);
             if (!consultation) {
                 return res.status(404).json({ message: 'No active booking found.' });
             }
@@ -235,8 +242,34 @@ module.exports = {
             return res.status(500).json({ message: 'Internal server error.' });
         }
     },
+    getUserConsultations: async (req, res) => {
+        try {
+            const rawToken = req.cookies?.session_token;
+            if (!rawToken)
+                res.status(401).json({ message: 'No session token found.' });
+            const session = getUserSession(rawToken);
+            if (!session)
+                res.status(401).json({ message: 'Session expired or invalid.' });
+            const user = getUser(session.user_id);
+            if (!user)
+                res.status(404).json({ message: 'User not found.' });
+            const consultations = getUserConsultations(user);
+            return res
+                .status(201)
+                .json({ message: 'Retrieved user consultations', consultations });
+        }
+        catch (error) {
+            return res.status(500).json({ message: 'Internal Server Error.' });
+        }
+    },
     cancelConsultation: async (req, res) => {
         try {
+            const user = req.user;
+            if (!user) {
+                return res.status(404).json({
+                    message: 'User not found. [leak-detected]: User should be retrieved and stored in the request object in the middleware level of the system.',
+                });
+            }
             const consultation = await getActiveConsultation(req.user?.user_id);
             if (!consultation) {
                 return res.status(404).json({ message: 'No booking to cancel.' });
