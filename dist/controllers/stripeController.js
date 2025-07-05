@@ -62,8 +62,8 @@ module.exports = {
                     },
                 ],
                 customer_email: user.email,
-                success_url: `${process.env.FRONTEND_DOMAIN}/payment/success?consultationId=${consultationId}`,
-                cancel_url: `${process.env.FRONTEND_DOMAIN}/payment/failure`,
+                success_url: `${process.env.FRONTEND_DOMAIN}/payment-status/status=success?consultationId=${consultationId}`,
+                cancel_url: `${process.env.FRONTEND_DOMAIN}/payment-status/status=failure`,
                 metadata: {
                     consultationId,
                 },
