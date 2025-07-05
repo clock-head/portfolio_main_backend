@@ -71,12 +71,15 @@ module.exports = {
             quantity: 1,
           },
         ],
+        customer_email: user.email,
         success_url: `${process.env.FRONTEND_URL}/payment/success?consultationId=${consultationId}`,
         cancel_url: `${process.env.FRONTEND_URL}/payment/failure`,
         metadata: {
           consultationId,
         },
       });
+
+      console.log('[Stripe] Checkout session created:', session);
 
       return res.status(200).json({ checkoutUrl: session.url });
     } catch (error) {

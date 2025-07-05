@@ -67,6 +67,7 @@ module.exports = {
                     consultationId,
                 },
             });
+            console.log('[Stripe] Checkout session created:', session);
             return res.status(200).json({ checkoutUrl: session.url });
         }
         catch (error) {
