@@ -24,6 +24,7 @@ const sessionStore = new SequelizeStore({
 const authRoutes = require('./routes/authRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
 const worksprintRoutes = require('./routes/worksprintRoutes');
+const stripeRoutes = require('./routes/stripeRoutes');
 
 (async () => {
   try {
@@ -64,6 +65,7 @@ const worksprintRoutes = require('./routes/worksprintRoutes');
     app.use('/api/auth', authRoutes);
     app.use('/api/consultation', consultationRoutes);
     app.use('/api/worksprint', worksprintRoutes);
+    app.use('/api/stripe', stripeRoutes);
 
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
