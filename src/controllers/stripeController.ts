@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CustomRequest, CustomResponse } from 'src/types/User';
-import { Consultation } from '@models/consultation.model';
+import { Consultation } from '../models';
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 

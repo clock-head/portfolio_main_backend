@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const consultation_model_1 = require("@models/consultation.model");
+const models_1 = require("../models");
 const stripe_1 = __importDefault(require("stripe"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -43,7 +43,7 @@ module.exports = {
             });
         }
         try {
-            const consultation = await consultation_model_1.Consultation.findByPk(consultationId);
+            const consultation = await models_1.Consultation.findByPk(consultationId);
             if (!consultation)
                 return res.status(404).json({ message: 'Consultation not found.' });
             const session = await stripe.checkout.sessions.create({
